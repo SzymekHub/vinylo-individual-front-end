@@ -12,7 +12,7 @@ function VinylItem(props) {
       </h3>
       <p>Description: {description}</p>
       <p>Artist: {aristName}</p>
-      <p>IsReleased: {isReleased.toString()}</p>
+      <p>Released: {isReleased ? "Yes" : "No"}</p>
     </li>
   );
 }
