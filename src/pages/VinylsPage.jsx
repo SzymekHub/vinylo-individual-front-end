@@ -1,33 +1,59 @@
-import React, { useState } from "react";
-import InputItem from "../components/InputItem";
-import VinylList from "../components/TodoList";
+import React, { useState, useEffect } from "react";
+import VinylsList from "../components/VinylsList";
+import axios from "axios";
 
 function VinylsPage() {
-  // This data is only present for demo purposes. Usually you obtain this through the backend.
-  const vinylsItemsData = [
-    {
-      id: 1,
-      title: "ALL RED",
-      Released: true,
-    },
-  ];
+  const [vinylsItems, setVinylsItems] = useState({ vinyls: [] });
 
-  const [vinylsItems, setVinylsItems] = useState(vinylsItemsData);
-
-  const addItem = (title) => {
-    const newItem = {
-      id: 2,
-      title: title,
-      done: false,
+  useEffect(() => {
+    //Fetch all the vinyls from the backend, when the component mounts
+    const fetchVinyls = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/vinyls");
+        setVinylsItems(response.data);
+        console.log("Fetched vinyls:", response.data); // Log the response
+      } catch (error) {
+        console.error("There was an error fetching the vinyls :( ", error);
+      }
     };
-    setToDoItems([...vinylsItems, newItem]);
-  };
+    fetchVinyls();
+  }, []);
 
+  // const addItem = async (title) => {
+  //   const newItem = {
+  //     title: title,
+  //     isrealesed: true,
+  //   };
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:8080/vinyls",
+  //       newItem
+  //     );
+  //     const saveId = response.data;
+  //     newItem.id = saveId.id;
+  //     //Update the state with the new item
+  //     const tempVinylsItems = {
+  //       vinyls: [...vinylsItems.vinyls, newItem],
+  //     };
+  //     setVinylsItems(tempVinylsItems);
+  //   } catch (error) {
+  //     if (
+  //       error.response &&
+  //       error.response.status === 400 &&
+  //       error.response.data === '400 BAD_REQUEST "Vinyl already exists"'
+  //     ) {
+  //       alert("Error: Duplicate vinyl item");
+  //       // Handle the specific error case here
+  //     } else {
+  //       console.error("An unexpected error occurred:", error);
+  //     }
+  //   }
+  // };
   return (
     <div className="container">
       <div className="inner">
-        <InputItem addItem={addItem} />
-        <VinylList vinylsItems={vinylsItems} />
+        {/* <InputItem addItem={addItem} /> */}
+        <VinylsList vinylsItems={vinylsItems} />
       </div>
     </div>
   );
