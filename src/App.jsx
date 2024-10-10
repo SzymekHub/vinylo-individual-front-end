@@ -7,21 +7,15 @@ import HomePage from "./pages/HomePage";
 function App() {
   return (
     <Router>
-      <div className="flex h-screen bg-white-500">
+      <main className="container mx-auto mt-20 p-4 ">
         <NavBar />
-        {/* Added marginTop to prevent the content from going behind the navbar */}
-        <main
-          className="flex-1 p-8 overflow-auto"
-          style={{ marginTop: "20%" }} // Adjust based on navbar height
-        >
-          <h1 className="text-3xl font-bold">Vinylo </h1>
-
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/Vinyls" element={<VinylsPage />} />
-          </Routes>
-        </main>
-      </div>
+        <h1 className="text-4xl font-bold mb-8">Vinylo</h1>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/Vinyls" element={<VinylsPage />} />
+        </Routes>
+        {/* </main> */}
+      </main>
     </Router>
   );
 }

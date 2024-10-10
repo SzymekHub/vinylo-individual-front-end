@@ -23,7 +23,7 @@ function VinylsPage() {
   const addItem = async (
     title,
     description,
-    aristName,
+    artistName,
     vinylType,
     isReleased
   ) => {
@@ -35,7 +35,7 @@ function VinylsPage() {
       id: maxId + 1,
       title: title,
       description: description,
-      aristName: aristName,
+      artistName: artistName,
       vinylType: vinylType,
       isReleased: isReleased,
     };
@@ -66,12 +66,19 @@ function VinylsPage() {
     }
   };
   return (
+    // <main
+    //   className="flex items-center
+    // bg-emerald-800
+    // justify-center
+    // min-h-screen"
+    // >
     <div className="container">
       <div className="inner">
         <InputVinyl addItem={addItem} />
         <VinylsList vinylsItems={vinylsItems} />
       </div>
     </div>
+    // </main>
   );
 }
 

@@ -3,21 +3,21 @@ import React, { useState } from "react";
 function InputVinyl(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [aristName, setAristName] = useState("");
+  const [artistName, setArtistName] = useState("");
   const [vinylType, setVinylType] = useState("");
-  const [isReleased, setIsReleased] = useState(false); // Initialize as false
+  const [isReleased, setIsReleased] = useState(false);
 
   const handleSubmit = (e) => {
     // Prevent the default form submission behavior
     e.preventDefault();
 
     // Call the addItem function passed via props
-    props.addItem(title, description, aristName, vinylType, isReleased);
+    props.addItem(title, description, artistName, vinylType, isReleased);
 
     // Clear the input field after submission
     setTitle("");
     setDescription("");
-    setAristName("");
+    setArtistName("");
     setVinylType("");
     setIsReleased(false);
   };
@@ -32,8 +32,8 @@ function InputVinyl(props) {
       case "description":
         setDescription(value);
         break;
-      case "aristName":
-        setAristName(value);
+      case "artistName":
+        setArtistName(value);
         break;
       case "vinylType":
         setVinylType(value);
@@ -43,54 +43,130 @@ function InputVinyl(props) {
     }
   };
 
+  const handleVinylTypeChange = (e) => {
+    setVinylType(e.target.value); // Update vinylType state on selection
+  };
+
   const handleCheckboxChange = (e) => {
     setIsReleased(e.target.checked); // Update isReleased state based on checkbox
   };
 
   return (
-    <form className="form-container" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="title"
-        className="input-text"
-        placeholder="Title"
-        value={title}
-        onChange={textChanged}
-      />
-      <input
-        type="text"
-        name="description"
-        className="input-text"
-        placeholder="Description"
-        value={description}
-        onChange={textChanged}
-      />
-      <input
-        type="text"
-        name="aristName"
-        className="input-text"
-        placeholder="Artist Name"
-        value={aristName}
-        onChange={textChanged}
-      />
-      <input
-        type="text"
-        name="vinylType"
-        className="input-text"
-        placeholder="Vinyl Type"
-        value={vinylType}
-        onChange={textChanged}
-      />
-      <label>
-        <input
-          type="checkbox"
-          checked={isReleased}
-          onChange={handleCheckboxChange}
-        />
-        Is Released
-      </label>
-      <button className="input-submit">Submit</button>
-    </form>
+    <div className="bg-gray-800 rounded-lg p-6 mb-8">
+      <h2 className="text-2xl font-bold sm:text-3xl text-emerald-500">
+        Add New Vinyl
+      </h2>
+
+      <form
+        className="w-full mx-auto mb-0 mt-8 space-y-4"
+        onSubmit={handleSubmit}
+      >
+        <div>
+          <p className="font-bold sm:text-1xl text-emerald-500">Title :</p>
+          <label htmlFor="title" className="sr-only">
+            Title
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              name="title"
+              className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
+              placeholder="Enter vinyl title"
+              value={title}
+              onChange={textChanged}
+            />
+          </div>
+        </div>
+
+        <div>
+          <p className="font-bold sm:text-1xl text-emerald-500">
+            Description :
+          </p>
+          <label htmlFor="description" className="sr-only">
+            Description
+          </label>
+          <div className="relative">
+            <textarea
+              type="text"
+              name="description"
+              className="w-full px-3 py-2 rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
+              placeholder="Enter vinyl description"
+              rows="3"
+              maxLength={150}
+              value={description}
+              onChange={textChanged}
+            />
+            <div className="text-emerald-400 text-sm text-right">
+              {description.length}/150
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p className="font-bold sm:text-1xl text-emerald-500">
+            Artist Name :
+          </p>
+          <label htmlFor="artistName" className="sr-only">
+            Artist Name
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              name="artistName"
+              className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
+              placeholder="Enter vinyl artist name"
+              value={artistName}
+              onChange={textChanged}
+            />
+          </div>
+        </div>
+
+        <div>
+          <p className="font-bold sm:text-1xl text-emerald-500">Vinyl Type :</p>
+          <select
+            id="vinylType"
+            name="vinylType"
+            className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
+            value={vinylType}
+            onChange={handleVinylTypeChange}
+          >
+            <option value="" className="text-emerald-300">
+              Select vinyl type
+            </option>
+            <option value="LP" className="text-emerald-300">
+              LP
+            </option>
+            <option value="EP" className="text-emerald-300">
+              EP
+            </option>
+            <option value="Single" className="text-emerald-300">
+              Single
+            </option>
+          </select>
+        </div>
+
+        <div className="flex items-center">
+          <label className="inline-flex items-center">
+            <input
+              type="checkbox"
+              checked={isReleased}
+              onChange={handleCheckboxChange}
+              className="rounded border-emerald-700 bg-emerald-800 text-emerald-500 shadow-sm focus:ring-emerald-500"
+            />
+            <span className="ml-2 text-emerald-100">Is Released</span>
+          </label>
+        </div>
+
+        <div className="flex items-center justify-between ">
+          <button
+            type="submit"
+            className="inline-block rounded-lg bg-emerald-600 px-5 py-3 text-sm font-medium text-white hover:bg-emerald-700 transition-colors"
+          >
+            Add more vinyls!
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
 
