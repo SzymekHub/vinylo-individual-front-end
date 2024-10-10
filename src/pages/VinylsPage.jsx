@@ -1,84 +1,38 @@
 import React, { useState, useEffect } from "react";
 import VinylsList from "../components/VinylsList";
 import InputVinyl from "../components/InputVinyl";
-import axios from "axios";
+import useFetchVinyls from "../components/useFetchVinyls";
+import useAddVinyl from "../components/useAddVinyl";
 
 function VinylsPage() {
-  const [vinylsItems, setVinylsItems] = useState({ vinyls: [] });
-
+  const {
+    vinylsItems: fetchedVinyls,
+    loading: loadingVinyls,
+    error: fetchError,
+  } = useFetchVinyls();
+  const [vinylsItems, setVinylsItems] = useState(fetchedVinyls);
+  // Update vinylsItems state whenever fetchedVinyls changes
   useEffect(() => {
-    //Fetch all the vinyls from the backend, when the component mounts
-    const fetchVinyls = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/vinyls");
-        setVinylsItems(response.data);
-        console.log("Fetched vinyls:", response.data); // Logs the response
-      } catch (error) {
-        console.error("There was an error fetching the vinyls :( ", error);
-      }
-    };
-    fetchVinyls();
-  }, []);
+    setVinylsItems(fetchedVinyls);
+  }, [fetchedVinyls]);
 
-  const addItem = async (
-    title,
-    description,
-    artistName,
-    vinylType,
-    isReleased
-  ) => {
-    // Find the maximum id in the existing vinyls
-    const existingIds = vinylsItems.vinyls.map((vinyl) => vinyl.id);
-    const maxId = existingIds.length > 0 ? Math.max(...existingIds) : 0;
+  const {
+    addVinyl,
+    loading: addingLoading,
+    error: addError,
+  } = useAddVinyl(vinylsItems, setVinylsItems);
 
-    const newItem = {
-      id: maxId + 1,
-      title: title,
-      description: description,
-      artistName: artistName,
-      vinylType: vinylType,
-      isReleased: isReleased,
-    };
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/vinyls",
-        newItem
-      );
-      const saveId = response.data;
-      newItem.id = saveId.id;
+  if (loadingVinyls) return <div>Loading...</div>; // Show loading state
+  if (fetchError) return <div>Error loading vinyls: {fetchError.message}</div>; // Handle errors
 
-      //Update the state with the new item
-      const tempVinylsItems = {
-        vinyls: [...vinylsItems.vinyls, newItem],
-      };
-      setVinylsItems(tempVinylsItems);
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.status === 400 &&
-        error.response.data === '400 BAD_REQUEST "Vinyl already exists"'
-      ) {
-        alert("Error: Duplicate vinyl item");
-        // Handle the specific error case here
-      } else {
-        console.error("An unexpected error occurred:", error);
-      }
-    }
-  };
   return (
-    // <main
-    //   className="flex items-center
-    // bg-emerald-800
-    // justify-center
-    // min-h-screen"
-    // >
     <div className="container">
       <div className="inner">
-        <InputVinyl addItem={addItem} />
+        <InputVinyl addItem={addVinyl} loading={addingLoading} />
         <VinylsList vinylsItems={vinylsItems} />
+        {addError && <div>Error adding vinyl: {addError}</div>}
       </div>
     </div>
-    // </main>
   );
 }
 
