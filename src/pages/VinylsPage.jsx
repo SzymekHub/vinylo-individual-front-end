@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import VinylsList from "../components/VinylsList";
 import InputVinyl from "../components/InputVinyl";
 import useFetchVinyls from "../components/useFetchVinyls";
 import useAddVinyl from "../components/useAddVinyl";
@@ -10,7 +9,9 @@ function VinylsPage() {
     loading: loadingVinyls,
     error: fetchError,
   } = useFetchVinyls();
+
   const [vinylsItems, setVinylsItems] = useState(fetchedVinyls);
+
   // Update vinylsItems state whenever fetchedVinyls changes
   useEffect(() => {
     setVinylsItems(fetchedVinyls);
@@ -29,7 +30,6 @@ function VinylsPage() {
     <div className="container">
       <div className="inner">
         <InputVinyl addItem={addVinyl} loading={addingLoading} />
-        <VinylsList vinylsItems={vinylsItems} />
         {addError && <div>Error adding vinyl: {addError}</div>}
       </div>
     </div>
