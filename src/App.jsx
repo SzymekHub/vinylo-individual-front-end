@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import VinylsPage from "./pages/VinylsPage";
 import HomePage from "./pages/HomePage";
+import AuctionsPage from "./pages/AuctionsPage";
+import RecordCollectionPage from "./pages/RecordCollectionPage";
 
 function App() {
   return (
@@ -13,8 +15,9 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/Vinyls" element={<VinylsPage />} />
+          <Route path="/Auctions" element={<AuctionsPage />} />
+          <Route path="/RecordCollection" element={<RecordCollectionPage />} />
         </Routes>
-        {/* </main> */}
       </main>
     </Router>
   );
