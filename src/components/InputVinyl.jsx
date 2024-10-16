@@ -1,20 +1,24 @@
 import React, { useState } from "react";
+import { TextField, Autocomplete } from "@mui/material"; // Import MUI components
+import useFetchArtists from "./useFetchArtists"; // Import the artist fetching hook
 
 function InputVinyl(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [artistName, setArtistName] = useState("");
+  const [artistName, setArtistName] = useState(""); // State for artist selection
   const [vinylType, setVinylType] = useState("");
   const [isReleased, setIsReleased] = useState(false);
+
+  const { artistsItems, loading, error } = useFetchArtists(); // Fetch artists
 
   const handleSubmit = (e) => {
     // Prevent the default form submission behavior
     e.preventDefault();
 
-    // Call the addItem function passed via props
+    // Now passing the full artist object, not just the name
     props.addItem(title, description, artistName, vinylType, isReleased);
 
-    // Clear the input field after submission
+    // Clear the form fields
     setTitle("");
     setDescription("");
     setArtistName("");
@@ -32,15 +36,17 @@ function InputVinyl(props) {
       case "description":
         setDescription(value);
         break;
-      case "artistName":
-        setArtistName(value);
-        break;
       case "vinylType":
         setVinylType(value);
         break;
       default:
         break;
     }
+  };
+
+  const handleArtistChange = (event, newValue) => {
+    // Update to store the full artist object instead of just the name
+    setArtistName(newValue);
   };
 
   const handleVinylTypeChange = (e) => {
@@ -102,6 +108,7 @@ function InputVinyl(props) {
           </div>
         </div>
 
+        {/* Artist Name Input with Autocomplete */}
         <div>
           <p className="font-bold sm:text-1xl text-emerald-500">
             Artist Name :
@@ -109,16 +116,19 @@ function InputVinyl(props) {
           <label htmlFor="artistName" className="sr-only">
             Artist Name
           </label>
-          <div className="relative">
-            <input
-              type="text"
-              name="artistName"
-              className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
-              placeholder="Enter vinyl artist name"
-              value={artistName}
-              onChange={textChanged}
-            />
-          </div>
+          <Autocomplete
+            options={artistsItems} // Use full artist objects here
+            getOptionLabel={(option) => option.name} // Display the artist name in the dropdown
+            value={artistName}
+            onChange={handleArtistChange}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                className="w-full rounded-lg bg-emerald-800 border-emerald-700 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
+              />
+            )}
+            sx={{ width: "100%" }}
+          />
         </div>
 
         <div>

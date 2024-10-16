@@ -8,7 +8,7 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
   const addVinyl = async (
     title,
     description,
-    artistName,
+    artist,
     vinylType,
     isReleased
   ) => {
@@ -22,7 +22,7 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
       id: maxId + 1,
       title,
       description,
-      artistName,
+      artist,
       vinylType,
       isReleased,
     };
