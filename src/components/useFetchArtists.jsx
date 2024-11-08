@@ -18,7 +18,7 @@ const useFetchArtists = () => {
         setFilteredArtists(response.data.artists);
         console.log("Fetched filtered artists:", response.data.artists); // Logs the response
       } catch (error) {
-        console.error("There was an error fetching the artitsts: ", error);
+        console.error("There was an error fetching the artists: ", error);
         setError(error);
       } finally {
         setLoading(false);

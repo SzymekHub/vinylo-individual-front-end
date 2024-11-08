@@ -8,45 +8,45 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
   const addVinyl = async (
     title,
     description,
-    artist,
+    artistId,  // Make sure artistId is passed correctly
     vinylType,
     isReleased
   ) => {
     setLoading(true);
     setError(null);
-
-    const existingIds = vinylsItems.vinyls.map((vinyl) => vinyl.id);
-    const maxId = existingIds.length > 0 ? Math.max(...existingIds) : 0;
-
+  
     const newItem = {
-      id: maxId + 1,
       title,
       description,
-      artist,
+      artist: artistId,  // Use artistId here
       vinylType,
       isReleased,
     };
-
+  
     try {
-      const response = await axios.post(
-        "http://localhost:8080/vinyls",
-        newItem
-      );
-      const saveId = response.data;
-      newItem.id = saveId.id;
-
-      // Update the state with the new item
-      const tempVinylsItems = {
-        vinyls: [...vinylsItems.vinyls, newItem],
-      };
-      setVinylsItems(tempVinylsItems);
+      const response = await axios.post("http://localhost:8080/vinyls", newItem);
+  
+      if (response && response.data) {
+        console.log("Vinyl added successfully:", response.data);
+  
+        // Add the new item with the DB-assigned ID to the state
+        const tempVinylsItems = {
+          vinyls: [...vinylsItems.vinyls, response.data], // Add the entire response with the ID
+        };
+        setVinylsItems(tempVinylsItems);
+      }
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status === 400 &&
-        error.response.data === '400 BAD_REQUEST "Vinyl already exists"'
-      ) {
-        alert("Error: Duplicate vinyl item");
+      if (error.response) {
+        console.error("Error adding vinyl:", error.response.data);
+  
+        if (
+          error.response.status === 400 &&
+          error.response.data === '400 BAD_REQUEST "Vinyl already exists"'
+        ) {
+          alert("Error: Duplicate vinyl item");
+        } else {
+          setError("An error occurred: " + error.response.data);
+        }
       } else {
         console.error("An unexpected error occurred:", error);
         setError("An unexpected error occurred");
@@ -54,7 +54,7 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   return { addVinyl, loading, error };
 };

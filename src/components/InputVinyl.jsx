@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { TextField, Autocomplete } from "@mui/material"; // Import MUI components
+import ArtistAutocomplete from "./ArtistAutocomplete";// Import the artist fetching hook
 import useFetchArtists from "./useFetchArtists"; // Import the artist fetching hook
+
 
 function InputVinyl(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [artistName, setArtistName] = useState(""); // State for artist selection
+  const [artistName, setArtistName] = useState(null); // Pass this to ArtistAutocomplete
   const [vinylType, setVinylType] = useState("");
   const [isReleased, setIsReleased] = useState(false);
 
@@ -14,17 +15,26 @@ function InputVinyl(props) {
   const handleSubmit = (e) => {
     // Prevent the default form submission behavior
     e.preventDefault();
-
-    // Now passing the full artist object, not just the name
-    props.addItem(title, description, artistName, vinylType, isReleased);
-
+  
+    // Log the artistName to verify it
+    console.log("Artist Name Object: ", artistName);
+  
+    // If artistName is selected, use its id; else send null
+    const artistId = artistName ? artistName.id : null;
+  
+    console.log("Artist ID: ", artistId); // Log the ID
+  
+    // Now passing the artistId instead of the full artist object
+    props.addItem(title, description, artistId, vinylType, isReleased);
+  
     // Clear the form fields
     setTitle("");
     setDescription("");
-    setArtistName("");
+    setArtistName(null);
     setVinylType("");
     setIsReleased(false);
   };
+  
 
   const textChanged = (e) => {
     const { name, value } = e.target;
@@ -45,10 +55,10 @@ function InputVinyl(props) {
   };
 
   const handleArtistChange = (event, newValue) => {
-    // Update to store the full artist object instead of just the name
-    setArtistName(newValue);
+    console.log("Selected Artist: ", newValue); // Logs the full artist object
+    setArtistName(newValue); // Set the full artist object
   };
-
+  
   const handleVinylTypeChange = (e) => {
     setVinylType(e.target.value); // Update vinylType state on selection
   };
@@ -108,28 +118,8 @@ function InputVinyl(props) {
           </div>
         </div>
 
-        {/* Artist Name Input with Autocomplete */}
-        <div>
-          <p className="font-bold sm:text-1xl text-emerald-500">
-            Artist Name :
-          </p>
-          <label htmlFor="artistName" className="sr-only">
-            Artist Name
-          </label>
-          <Autocomplete
-            options={artistsItems} // Use full artist objects here
-            getOptionLabel={(option) => option.name} // Display the artist name in the dropdown
-            value={artistName}
-            onChange={handleArtistChange}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                className="w-full rounded-lg bg-emerald-800 border-emerald-700 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
-              />
-            )}
-            sx={{ width: "100%" }}
-          />
-        </div>
+        {/* ArtistAutocomplete Component */}
+        <ArtistAutocomplete artistName={artistName} setArtistName={setArtistName} />
 
         <div>
           <p className="font-bold sm:text-1xl text-emerald-500">Vinyl Type :</p>

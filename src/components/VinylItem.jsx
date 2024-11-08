@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function VinylItem(props) {
   const { vinylType, title, description, artist, isReleased } = props.vinylItem;
 
-  //Added a state to toggle visibiltiy of details
+  //Added a state to toggle visibility of details
   const [showDetails, setShowDetails] = useState(false);
 
   const handleToggleDetails = () => {
