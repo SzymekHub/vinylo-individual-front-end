@@ -20,6 +20,7 @@ function VinylsPage() {
   const {
     addVinyl,
     loading: addingLoading,
+    message: addedVinylMessage,
     error: addError,
   } = useAddVinyl(vinylsItems, setVinylsItems);
 
@@ -30,8 +31,10 @@ function VinylsPage() {
     <div className="container">
       <div className="inner">
         <InputVinyl addItem={addVinyl} loading={addingLoading} />
+
         {addError && <div>Error adding vinyl: {addError}</div>}
-      </div>
+        {addedVinylMessage && <div> Successfully added a vinyl: {addedVinylMessage} </div>}
+        </div>
     </div>
   );
 }

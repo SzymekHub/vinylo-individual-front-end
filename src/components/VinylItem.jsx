@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 function VinylItem(props) {
-  const { vinylType, title, description, artist, isReleased } = props.vinylItem;
+  const { vinylType, title, description, artist_id, isReleased } = props.vinylItem;
 
   //Added a state to toggle visibility of details
   const [showDetails, setShowDetails] = useState(false);
@@ -14,7 +14,7 @@ function VinylItem(props) {
     <li className="bg-emerald-800 rounded-md p-4 flex justify-between items-center">
       <div className="w-4/5">
         <h3 className="font-semibold text-white">{title}</h3>
-        <p className="text-emerald-300">{artist?.name}</p>
+        <p className="text-emerald-300">{artist_id?.artist_id}</p>
         <p className="text-sm text-emerald-400"> {vinylType}</p>
 
         {/* logic to show details only if View Details button is true */}
