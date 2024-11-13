@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ArtistAutocomplete from "./ArtistAutocomplete";
 
-
 function InputVinyl(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -10,37 +9,28 @@ function InputVinyl(props) {
   const [isReleased, setIsReleased] = useState(false);
 
   const handleSubmit = (e) => {
-  // Prevent the default form submission behavior
-  e.preventDefault();
+    // Prevent the default form submission behavior
+    e.preventDefault();
 
-  if (!artistId || !title || !description || !vinylType) {
-    setError("Please fill in all fields.");
-    return;
-  }
-  
-  // Log the artist id, not the whole object
-  console.log("Selected Artist ID: ", artistId); // Logs the artist ID
+    if (!artistId || !title || !description || !vinylType) {
+      setError("Please fill in all fields.");
+      return;
+    }
 
-  // // Create the vinylData object using artistName (the ID)
-  // const vinylData = {
-  //     title,
-  //     description,
-  //     vinylType,
-  //     isReleased,
-  //     artist_id: artistId, // Correctly using artist_id here
-  //   };
+    // Log the artist id, not the whole object
+    console.log("Selected Artist ID: ", artistId); // Logs the artist ID
 
-  // Now passing the artistId instead of the full artist object
-  props.addItem(title, description, artistId, vinylType, isReleased);
+    // Now passing the artistId instead of the full artist object
+    props.addItem(title, description, artistId, vinylType, isReleased);
 
-  // Clear the form fields
+    // Clear the form fields
     setTitle("");
     setDescription("");
     setArtistId(null);
     setVinylType("");
     setIsReleased(false);
   };
-  
+
   const textChanged = (e) => {
     const { name, value } = e.target;
     // Update the corresponding field based on the input name
@@ -59,7 +49,6 @@ function InputVinyl(props) {
     }
   };
 
-  
   const handleVinylTypeChange = (e) => {
     setVinylType(e.target.value); // Update vinylType state on selection
   };

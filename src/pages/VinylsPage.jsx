@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import InputVinyl from "../components/InputVinyl";
-import useFetchVinyls from "../components/useFetchVinyls";
-import useAddVinyl from "../components/useAddVinyl";
+import InputVinyl from "../components/addvinylpage/InputVinyl";
+import useFetchVinyls from "../components/hooks/useFetchVinyls";
+import useAddVinyl from "../components/hooks/useAddVinyl";
 
 function VinylsPage() {
   const {
@@ -33,8 +33,10 @@ function VinylsPage() {
         <InputVinyl addItem={addVinyl} loading={addingLoading} />
 
         {addError && <div>Error adding vinyl: {addError}</div>}
-        {addedVinylMessage && <div> Successfully added a vinyl: {addedVinylMessage} </div>}
-        </div>
+        {addedVinylMessage && (
+          <div> Successfully added a vinyl: {addedVinylMessage} </div>
+        )}
+      </div>
     </div>
   );
 }

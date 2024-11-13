@@ -4,7 +4,7 @@ import axios from "axios";
 const useFetchArtists = () => {
   const [artistsItems, setArtistsItems] = useState([]);
   // Store filtered artists
-  const [filteredArtists, setFilteredArtists] = useState([]); 
+  const [filteredArtists, setFilteredArtists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -15,7 +15,6 @@ const useFetchArtists = () => {
         const response = await axios.get("http://localhost:8080/artist");
         setArtistsItems(response.data.artists);
         setFilteredArtists(response.data.artists); // Filter based on certain conditions if needed
-        console.log("Fetched filtered artists:", response.data.artists); // Logs the response
       } catch (error) {
         console.error("There was an error fetching the artists: ", error);
         setError(error);

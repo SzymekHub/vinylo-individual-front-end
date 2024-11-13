@@ -1,6 +1,5 @@
 import { Autocomplete, TextField } from "@mui/material";
-import useFetchArtists from "./useFetchArtists";
-import { useState } from "react";
+import useFetchArtists from "../hooks/useFetchArtists";
 
 const ArtistAutocomplete = ({ artistId, setArtistId }) => {
   const { filteredArtists, loading, error } = useFetchArtists();
@@ -20,10 +19,12 @@ const ArtistAutocomplete = ({ artistId, setArtistId }) => {
     <Autocomplete
       id="artist_id"
       options={filteredArtists}
-      getOptionLabel={(option) => option.name || ''}
+      getOptionLabel={(option) => option.name || ""}
       value={filteredArtists.find((artist) => artist.id === artistId) || null}
       onChange={handleArtistChange}
-      isOptionEqualToValue={(option, value) => option.artist_id === value.artist_id} // Ensures proper comparison
+      isOptionEqualToValue={(option, value) =>
+        option.artist_id === value.artist_id
+      } // Ensures proper comparison
       renderInput={(params) => (
         <TextField
           {...params}
