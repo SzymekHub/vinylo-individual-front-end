@@ -7,14 +7,40 @@ import {
   ShoppingBasket,
 } from "lucide-react";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import TokenManager from "../hooks/TokenManager";
 
-export default function NavBar() {
+export default function NavBar({
+  claims,
+  setClaims,
+  setLocalClaims,
+  setUserDetails,
+}) {
+  const navigate = useNavigate(); // Initialize navigate for redirection after logout
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogout = () => {
+    TokenManager.clear();
+    setClaims(null);
+    setLocalClaims(null);
+    setUserDetails(null);
+    // Ensure the page is redirected after state update
+    navigate("/", { replace: true });
+  };
+
   const navItems = [
-    //{ name: "Home", icon: Home, path: "/" },
-    //{ name: "Vinyls ", icon: Disc3, path: "/Vinyls" },
-    { name: "Record Collection", icon: LibraryBig, path: "/RecordCollection" },
+    { name: "Home", icon: Home, path: "/" },
+    {
+      name: "Record Collection",
+      icon: LibraryBig,
+      path: "/RecordCollection",
+    },
     { name: "Auctions", icon: ShoppingBasket, path: "/Auctions" },
+    { name: "Logout", icon: DoorOpen, onClick: handleLogout },
+  ];
+
+  const guestItems = [
+    { name: "Home", icon: Home, path: "/" },
     { name: "Login", icon: DoorOpen, path: "/Login" },
     { name: "Register", icon: UserPlus, path: "/Register" },
   ];
@@ -35,17 +61,31 @@ export default function NavBar() {
 
         {/* Centered navigation items for larger screens */}
         <ul className="hidden md:flex justify-center space-x-6 flex-grow">
-          {navItems.map((item) => (
-            <li key={item.name}>
-              <a
-                href={item.path}
-                className="flex items-center px-3 py-2 rounded-md hover:bg-emerald-600 text-emerald-50 hover:text-emerald-900 transition-colors"
-              >
-                <item.icon className="mr-2 h-5 w-5 text-emerald-50" />
-                {item.name}
-              </a>
-            </li>
-          ))}
+          {/* Render guest items if no claims */}
+          {claims
+            ? navItems.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    className="flex items-center px-3 py-2 rounded-md hover:bg-emerald-600 text-emerald-50 hover:text-emerald-900 transition-colors"
+                    onClick={item.onClick} // Ensure onClick is triggered
+                  >
+                    <item.icon className="mr-2 h-5 w-5 text-emerald-50" />
+                    {item.name}
+                  </Link>
+                </li>
+              ))
+            : guestItems.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    className="flex items-center px-3 py-2 rounded-md hover:bg-emerald-600 text-emerald-50 hover:text-emerald-900 transition-colors"
+                  >
+                    <item.icon className="mr-2 h-5 w-5 text-emerald-50" />
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
         </ul>
 
         {/* Mobile menu button for small screens */}
