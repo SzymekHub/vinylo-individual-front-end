@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import AuctionsPage from "./pages/AuctionsPage";
 import RecordCollectionPage from "./pages/RecordCollectionPage";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/Vinyls" element={<VinylsPage />} />
           <Route path="/Auctions" element={<AuctionsPage />} />
           <Route path="/RecordCollection" element={<RecordCollectionPage />} />
+          <Route path="/Register" element={<RegisterPage />} />
           <Route path="/Login" element={<LoginPage />} />
         </Routes>
       </main>

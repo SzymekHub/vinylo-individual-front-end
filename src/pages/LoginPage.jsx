@@ -45,7 +45,6 @@ function LoginPage() {
 
   return (
     <div>
-      <h1>My App</h1>
       {claims ? (
         <div>
           <p>Welcome, {claims.sub}</p>

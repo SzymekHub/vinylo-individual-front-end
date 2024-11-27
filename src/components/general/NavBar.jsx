@@ -3,6 +3,7 @@ import {
   Disc3,
   DoorOpen,
   LibraryBig,
+  UserPlus,
   ShoppingBasket,
 } from "lucide-react";
 import { useState } from "react";
@@ -15,6 +16,7 @@ export default function NavBar() {
     { name: "Record Collection", icon: LibraryBig, path: "/RecordCollection" },
     { name: "Auctions", icon: ShoppingBasket, path: "/Auctions" },
     { name: "Login", icon: DoorOpen, path: "/Login" },
+    { name: "Register", icon: UserPlus, path: "/Register" },
   ];
 
   return (
