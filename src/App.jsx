@@ -1,10 +1,11 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import NavBar from "./components/General/NavBar";
+import NavBar from "./components/general/NavBar";
 import VinylsPage from "./pages/VinylsPage";
 import HomePage from "./pages/HomePage";
 import AuctionsPage from "./pages/AuctionsPage";
 import RecordCollectionPage from "./pages/RecordCollectionPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/Vinyls" element={<VinylsPage />} />
           <Route path="/Auctions" element={<AuctionsPage />} />
           <Route path="/RecordCollection" element={<RecordCollectionPage />} />
+          <Route path="/Login" element={<LoginPage />} />
         </Routes>
       </main>
     </Router>
