@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import TokenManager from "./TokenManager";
 
 const useFetchVinyls = () => {
   const [vinylsItems, setVinylsItems] = useState([]);
@@ -9,7 +10,10 @@ const useFetchVinyls = () => {
   useEffect(() => {
     const fetchVinyls = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/vinyls");
+        const response = await axios.get("http://localhost:8080/vinyls", {
+          headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
+        });
+
         setVinylsItems(response.data.vinyls);
         console.log("Fetched vinyls:", response.data); // Logs the response
       } catch (error) {

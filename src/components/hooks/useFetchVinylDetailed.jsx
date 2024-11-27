@@ -1,8 +1,11 @@
 import axios from "axios";
+import TokenManager from "./TokenManager";
 
 export async function useFetchVinylDetailed(id, setVinylDetails) {
   await axios
-    .get(`http://localhost:8080/vinyls/${id}`)
+    .get(`http://localhost:8080/vinyls/${id}`, {
+      headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
+    })
     .then((response) => {
       setVinylDetails(response.data);
       console.log("Fetched vinyls:", response.data); // Logs the response

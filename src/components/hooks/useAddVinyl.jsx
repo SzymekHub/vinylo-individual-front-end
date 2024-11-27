@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import TokenManager from "./TokenManager";
 
 const useAddVinyl = (vinylsItems, setVinylsItems) => {
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,10 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
     try {
       const response = await axios.post(
         "http://localhost:8080/vinyls",
-        newItem
+        newItem,
+        {
+          headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
+        }
       );
 
       if (response && response.data) {

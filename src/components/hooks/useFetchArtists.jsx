@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import TokenManager from "./TokenManager";
 
 const useFetchArtists = () => {
   const [artistsItems, setArtistsItems] = useState([]);
@@ -12,7 +13,9 @@ const useFetchArtists = () => {
     // Fetch the artist data from the backend on component mount
     const fetchArtists = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/artist");
+        const response = await axios.get("http://localhost:8080/artist", {
+          headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
+        });
         setArtistsItems(response.data.artists);
         setFilteredArtists(response.data.artists); // Filter based on certain conditions if needed
       } catch (error) {

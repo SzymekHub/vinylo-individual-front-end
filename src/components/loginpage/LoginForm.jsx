@@ -10,7 +10,7 @@ function LoginForm(props) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-emerald-950 to-emerald-900 flex items-center justify-center py-4 px-2 sm:px-3 lg:px-4 rounded-2xl">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-emerald-950 to-emerald-900 flex items-center justify-center py-1 px-0 rounded-full">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-extrabold text-emerald-400 drop-shadow-lg">
