@@ -24,13 +24,6 @@ function RecordCollectionPage() {
     <div className="container">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-1xl font-bold">Record Collection</h1>
-        <a
-          href="/Vinyls"
-          className="flex items-center px-3 py-2 rounded-md hover:bg-emerald-600 text-emerald-50 hover:text-emerald-900 transition-colors"
-        >
-          <Disc3 className="mr-2 h-5 w-5 text-emerald-50" />
-          Add New Vinyl
-        </a>
       </div>
       <div className="inner">
         <VinylsList

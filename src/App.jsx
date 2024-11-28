@@ -29,15 +29,27 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route
             path="/Vinyls"
-            element={<PrivateRoute element={<VinylsPage />} />}
+            element={
+              <PrivateRoute element={<VinylsPage />} allowedRoles={["ADMIN"]} />
+            }
           />
           <Route
             path="/Auctions"
-            element={<PrivateRoute element={<AuctionsPage />} />}
+            element={
+              <PrivateRoute
+                element={<AuctionsPage />}
+                allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
+              />
+            }
           />
           <Route
             path="/RecordCollection"
-            element={<PrivateRoute element={<RecordCollectionPage />} />}
+            element={
+              <PrivateRoute
+                element={<RecordCollectionPage />}
+                allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
+              />
+            }
           />
           <Route path="/Register" element={<RegisterPage />} />
           <Route path="/Login" element={<LoginPage setClaims={setClaims} />} />

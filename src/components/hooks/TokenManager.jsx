@@ -11,6 +11,11 @@ const TokenManager = {
     }
     return JSON.parse(sessionStorage.getItem("claims"));
   },
+  getRoles: () => {
+    const claims = TokenManager.getClaims();
+    return claims?.roles || []; // Assuming roles are stored as an array in the token
+  },
+
   setAccessToken: (token) => {
     sessionStorage.setItem("accessToken", token);
     const claims = jwt_decode.jwtDecode(token);

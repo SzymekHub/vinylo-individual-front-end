@@ -28,6 +28,8 @@ export default function NavBar({
     navigate("/", { replace: true });
   };
 
+  const roles = TokenManager.getRoles();
+
   const navItems = [
     { name: "Home", icon: Home, path: "/" },
     {
@@ -35,6 +37,9 @@ export default function NavBar({
       icon: LibraryBig,
       path: "/RecordCollection",
     },
+    ...(roles.includes("ADMIN")
+      ? [{ name: "Vinyls", icon: Disc3, path: "/Vinyls" }]
+      : []),
     { name: "Auctions", icon: ShoppingBasket, path: "/Auctions" },
     { name: "Logout", icon: DoorOpen, onClick: handleLogout },
   ];
@@ -118,17 +123,30 @@ export default function NavBar({
           isOpen ? "block" : "hidden"
         } md:hidden bg-emerald-700 mt-4`}
       >
-        {navItems.map((item) => (
-          <li key={item.name} className="text-center">
-            <a
-              href={item.path}
-              className="flex justify-center items-center px-3 py-2 rounded-md hover:bg-emerald-600 text-emerald-50 hover:text-emerald-900 transition-colors"
-            >
-              <item.icon className="mr-2 h-5 w-5 text-emerald-50" />
-              {item.name}
-            </a>
-          </li>
-        ))}
+        {claims
+          ? navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  className="flex items-center px-3 py-2 rounded-md hover:bg-emerald-600 text-emerald-50 hover:text-emerald-900 transition-colors"
+                  onClick={item.onClick} // Ensure onClick is triggered
+                >
+                  <item.icon className="mr-2 h-5 w-5 text-emerald-50" />
+                  {item.name}
+                </Link>
+              </li>
+            ))
+          : guestItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  className="flex items-center px-3 py-2 rounded-md hover:bg-emerald-600 text-emerald-50 hover:text-emerald-900 transition-colors"
+                >
+                  <item.icon className="mr-2 h-5 w-5 text-emerald-50" />
+                  {item.name}
+                </Link>
+              </li>
+            ))}
       </ul>
     </div>
   );
