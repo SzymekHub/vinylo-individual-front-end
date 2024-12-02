@@ -1,18 +1,34 @@
 import React, { useState } from "react";
+import useVinylEnums from "../hooks/useFetchEnums";
 import ArtistAutocomplete from "./ArtistAutocomplete";
 
 function InputVinyl(props) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [artistId, setArtistId] = useState(null); // Stores artist ID
+  const { enums, loading: enumsLoading, error: enumsError } = useVinylEnums();
   const [vinylType, setVinylType] = useState("");
+  const [artistId, setArtistId] = useState(null); // Stores artist ID
+  const [title, setTitle] = useState("");
+  const [speed, setSpeed] = useState("");
+  const [state, setState] = useState("");
+  const [color, setColor] = useState("");
   const [isReleased, setIsReleased] = useState(false);
+  const [description, setDescription] = useState("");
+
+  if (enumsLoading) return <p>Loading enums...</p>;
+  if (enumsError) return <p>Error loading enums: {enumsError}</p>;
 
   const handleSubmit = (e) => {
     // Prevent the default form submission behavior
     e.preventDefault();
 
-    if (!artistId || !title || !description || !vinylType) {
+    if (
+      !artistId ||
+      !title ||
+      !description ||
+      !vinylType ||
+      !speed ||
+      !state ||
+      !color
+    ) {
       setError("Please fill in all fields.");
       return;
     }
@@ -21,36 +37,53 @@ function InputVinyl(props) {
     console.log("Selected Artist ID: ", artistId); // Logs the artist ID
 
     // Now passing the artistId instead of the full artist object
-    props.addItem(title, description, artistId, vinylType, isReleased);
+    props.addItem(
+      vinylType,
+      artistId,
+      title,
+      speed,
+      state,
+      color,
+      isReleased,
+      description
+    );
 
     // Clear the form fields
-    setTitle("");
-    setDescription("");
-    setArtistId(null);
     setVinylType("");
+    setArtistId(null);
+    setTitle("");
+    setSpeed("");
+    setState("");
+    setColor("");
     setIsReleased(false);
+    setDescription("");
   };
 
   const textChanged = (e) => {
     const { name, value } = e.target;
     // Update the corresponding field based on the input name
     switch (name) {
+      case "vinylType":
+        setVinylType(value);
+        break;
       case "title":
         setTitle(value);
+        break;
+      case "speed":
+        setSpeed(value);
+        break;
+      case "state":
+        setState(value);
+        break;
+      case "color":
+        setColor(value);
         break;
       case "description":
         setDescription(value);
         break;
-      case "vinylType":
-        setVinylType(value);
-        break;
       default:
         break;
     }
-  };
-
-  const handleVinylTypeChange = (e) => {
-    setVinylType(e.target.value); // Update vinylType state on selection
   };
 
   const handleCheckboxChange = (e) => {
@@ -68,6 +101,27 @@ function InputVinyl(props) {
         onSubmit={handleSubmit}
       >
         <div>
+          <p className="font-bold sm:text-1xl text-emerald-500">Vinyl Type :</p>
+          <select
+            id="vinylType"
+            name="vinylType"
+            className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
+            value={vinylType}
+            onChange={(e) => setVinylType(e.target.value)}
+          >
+            <option value="">Select Vinyl Type</option>
+            {enums?.vinylTypes?.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* ArtistAutocomplete Component */}
+        <ArtistAutocomplete artistId={artistId} setArtistId={setArtistId} />
+
+        <div>
           <p className="font-bold sm:text-1xl text-emerald-500">Title :</p>
           <label htmlFor="title" className="sr-only">
             Title
@@ -82,6 +136,78 @@ function InputVinyl(props) {
               onChange={textChanged}
             />
           </div>
+        </div>
+
+        <div>
+          <p className="font-bold sm:text-1xl text-emerald-500">
+            Vinyl Play Speed :
+          </p>
+          <select
+            id="speed"
+            name="speed"
+            className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
+            value={speed}
+            onChange={(e) => setSpeed(e.target.value)}
+          >
+            <option value="">Select Speed</option>
+            {enums?.speeds?.map((sp) => (
+              <option key={sp} value={sp}>
+                {sp}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <p className="font-bold sm:text-1xl text-emerald-500">
+            Vinyl State :
+          </p>
+          <select
+            id="state"
+            name="state"
+            className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+          >
+            <option value="">Select State</option>
+            {enums?.states?.map((st) => (
+              <option key={st} value={st}>
+                {st}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <p className="font-bold sm:text-1xl text-emerald-500">
+            Vinyl Color :
+          </p>
+          <select
+            id="color"
+            name="color"
+            className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+          >
+            <option value="">Select Color</option>
+            {enums?.colors?.map((clr) => (
+              <option key={clr} value={clr}>
+                {clr}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex items-center">
+          <label className="inline-flex items-center">
+            <input
+              type="checkbox"
+              checked={isReleased}
+              onChange={handleCheckboxChange}
+              className="rounded border-emerald-700 bg-emerald-800 text-emerald-500 shadow-sm focus:ring-emerald-500"
+            />
+            <span className="ml-2 text-emerald-100">Is Released</span>
+          </label>
         </div>
 
         <div>
@@ -106,45 +232,6 @@ function InputVinyl(props) {
               {description.length}/150
             </div>
           </div>
-        </div>
-
-        {/* ArtistAutocomplete Component */}
-        <ArtistAutocomplete artistId={artistId} setArtistId={setArtistId} />
-
-        <div>
-          <p className="font-bold sm:text-1xl text-emerald-500">Vinyl Type :</p>
-          <select
-            id="vinylType"
-            name="vinylType"
-            className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
-            value={vinylType}
-            onChange={handleVinylTypeChange}
-          >
-            <option value="" className="text-emerald-300">
-              Select vinyl type
-            </option>
-            <option value="LP" className="text-emerald-300">
-              LP
-            </option>
-            <option value="EP" className="text-emerald-300">
-              EP
-            </option>
-            <option value="Single" className="text-emerald-300">
-              Single
-            </option>
-          </select>
-        </div>
-
-        <div className="flex items-center">
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              checked={isReleased}
-              onChange={handleCheckboxChange}
-              className="rounded border-emerald-700 bg-emerald-800 text-emerald-500 shadow-sm focus:ring-emerald-500"
-            />
-            <span className="ml-2 text-emerald-100">Is Released</span>
-          </label>
         </div>
 
         <div className="flex items-center justify-between ">

@@ -1,29 +1,57 @@
 import { useState } from "react";
 import axios from "axios";
 import TokenManager from "./TokenManager";
+import useVinylEnums from "./useFetchEnums";
 
 const useAddVinyl = (vinylsItems, setVinylsItems) => {
+  const { enums, loading: enumsLoading, error: enumsError } = useVinylEnums();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [addedVinylMessage, setAddedVinylMessage] = useState(""); // State for success message
 
   const addVinyl = async (
-    title,
-    description,
-    artistId, // Make sure artistId is passed correctly
     vinylType,
-    isReleased
+    artistId,
+    title,
+    speed,
+    state,
+    color,
+    isReleased,
+    description
   ) => {
     setLoading(true);
     setError(null);
     setAddedVinylMessage(""); // Clear any previous success message
 
+    // Validate enums before submitting
+    if (!enums || enumsLoading || enumsError) {
+      setError("Enums data not loaded. Please try again.");
+      setLoading(false);
+      return;
+    }
+
+    const validateEnum = (value, key) => enums[key]?.includes(value);
+
+    if (
+      !validateEnum(vinylType, "vinylTypes") ||
+      !validateEnum(speed, "speeds") ||
+      !validateEnum(state, "states") ||
+      !validateEnum(color, "colors")
+    ) {
+      setError("Invalid value(s) for one or more fields.");
+      setLoading(false);
+      return;
+    }
+
     const newItem = {
-      title,
-      description,
-      artist_id: artistId, // Use artistId here
       vinylType,
+      artist_id: artistId, // Use artistId here
+      title,
+      speed,
+      state,
+      color,
       isReleased,
+      description,
     };
 
     try {
@@ -54,9 +82,10 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
 
         if (
           error.response.status === 400 &&
-          error.response.data === '400 BAD_REQUEST "Vinyl already exists"'
+          error.response.data ===
+            "Vinyl already exists with the same title and artist."
         ) {
-          alert("Error: Duplicate vinyl item");
+          setError("A vinyl with the same title and artist already exists.");
         } else {
           setError("An error occurred: " + error.response.data);
         }
