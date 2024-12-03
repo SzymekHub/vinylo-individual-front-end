@@ -17,7 +17,8 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
     state,
     color,
     isReleased,
-    description
+    description,
+    spotifyAlbumId
   ) => {
     setLoading(true);
     setError(null);
@@ -52,6 +53,7 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
       color,
       isReleased,
       description,
+      spotifyAlbumId,
     };
 
     try {

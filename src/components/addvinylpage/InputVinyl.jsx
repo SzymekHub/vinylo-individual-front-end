@@ -12,6 +12,7 @@ function InputVinyl(props) {
   const [color, setColor] = useState("");
   const [isReleased, setIsReleased] = useState(false);
   const [description, setDescription] = useState("");
+  const [spotifyAlbumId, setSpotifyAlbumId] = useState("");
 
   if (enumsLoading) return <p>Loading enums...</p>;
   if (enumsError) return <p>Error loading enums: {enumsError}</p>;
@@ -45,7 +46,8 @@ function InputVinyl(props) {
       state,
       color,
       isReleased,
-      description
+      description,
+      spotifyAlbumId
     );
 
     // Clear the form fields
@@ -57,6 +59,7 @@ function InputVinyl(props) {
     setColor("");
     setIsReleased(false);
     setDescription("");
+    setSpotifyAlbumId("");
   };
 
   const textChanged = (e) => {
@@ -80,6 +83,9 @@ function InputVinyl(props) {
         break;
       case "description":
         setDescription(value);
+        break;
+      case "spotifyAlbumId":
+        setSpotifyAlbumId(value);
         break;
       default:
         break;
@@ -230,6 +236,29 @@ function InputVinyl(props) {
             />
             <div className="text-emerald-400 text-sm text-right">
               {description.length}/150
+            </div>
+          </div>
+        </div>
+        <div>
+          <p className="font-bold sm:text-1xl text-emerald-500">
+            Spotify Album ID :
+          </p>
+          <label htmlFor="spotifyAlbumId" className="sr-only">
+            Spotify Album ID
+          </label>
+          <div className="relative">
+            <textarea
+              type="text"
+              name="spotifyAlbumId"
+              className="w-full px-3 py-2 rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
+              placeholder="Enter Spotify Album ID"
+              rows="3"
+              maxLength={666}
+              value={spotifyAlbumId}
+              onChange={textChanged}
+            />
+            <div className="text-emerald-400 text-sm text-right">
+              {spotifyAlbumId.length}/666
             </div>
           </div>
         </div>

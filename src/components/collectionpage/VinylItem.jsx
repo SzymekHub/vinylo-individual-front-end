@@ -79,8 +79,8 @@ function VinylItem({ vinylItem }) {
                 embedUrl && (
                   <iframe
                     style={{ borderRadius: "12px" }}
-                    src={`https://open.spotify.com/embed/album/${vinylDetails.spotifyAlbumId}?utm_source=generator`} //if i don't want colors add this line: &theme=0
-                    width="100%"
+                    src={`https://open.spotify.com/embed/album/${vinylDetails.spotifyAlbumId}?utm_source=generator`} //if i don't want colors add this line: &theme=9
+                    width="50%"
                     height="352"
                     frameBorder="0"
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
