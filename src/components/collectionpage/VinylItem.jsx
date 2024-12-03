@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import useFetchVinylDetailed from "../hooks/useFetchVinylDetailed";
 import useFetchArtists from "../hooks/useFetchArtists";
 import useVinylEnums from "../hooks/useFetchEnums";
+import useFetchSpotifyEmbedUrl from "../spotify/useFetchSpotifyEmbedUrl";
 
 function VinylItem({ vinylItem }) {
   if (!vinylItem) {
     return <div>Loading details...</div>; // or any other fallback UI
   }
 
-  var { vinylType, title, id, state } = vinylItem;
+  var { vinylType, title, id, state, spotifyAlbumId } = vinylItem;
 
   // Added a state to toggle visibility of details
   const [showDetails, setShowDetails] = useState(false);
   const [vinylDetails, setVinylDetails] = useState(false);
+  const { embedUrl, loading, error, fetchEmbedUrl } = useFetchSpotifyEmbedUrl();
   const { artistsItems, loading: artistsLoading } = useFetchArtists();
   const { enums } = useVinylEnums();
 
@@ -20,6 +22,10 @@ function VinylItem({ vinylItem }) {
     await useFetchVinylDetailed(id, setVinylDetails);
     // Toggle visibility of details
     setShowDetails((prevState) => !prevState);
+    if (!showDetails) {
+      await fetchEmbedUrl(vinylItem.spotifyAlbumId); // Fetch Spotify embed URL
+      console.log("Spotify? " + vinylItem.spotifyAlbumId);
+    }
   };
 
   // Find the artist name by matching artist_id with fetched artists
@@ -64,6 +70,25 @@ function VinylItem({ vinylItem }) {
               Description:{" "}
               {vinylDetails.description || " No description available."}
             </p>
+            <div className="mt-4">
+              {loading ? (
+                <p>Loading Spotify embed...</p>
+              ) : error ? (
+                <p className="text-red-400">Failed to load Spotify embed</p>
+              ) : (
+                embedUrl && (
+                  <iframe
+                    style={{ borderRadius: "12px" }}
+                    src={`https://open.spotify.com/embed/album/${vinylDetails.spotifyAlbumId}?utm_source=generator`} //if i don't want colors add this line: &theme=0
+                    width="100%"
+                    height="352"
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  ></iframe>
+                )
+              )}
+            </div>
           </div>
         )}
       </div>

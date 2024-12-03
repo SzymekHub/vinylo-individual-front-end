@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import VinylsList from "../components/collectionpage/VinylsList";
 import VinylItem from "../components/collectionpage/VinylItem";
-import { Disc3 } from "lucide-react";
 import useFetchVinyls from "../components/hooks/useFetchVinyls";
 
 function RecordCollectionPage() {
