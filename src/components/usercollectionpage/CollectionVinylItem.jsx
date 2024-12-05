@@ -1,36 +1,42 @@
 import React, { useState } from "react";
-import useFetchVinylDetailed from "../hooks/useFetchVinylDetailed";
+import useFetchVinylsCollectionDetails from "../hooks/useFetchVinylsCollectionDetails";
 import useFetchArtists from "../hooks/useFetchArtists";
 import useVinylEnums from "../hooks/useFetchEnums";
 import useFetchSpotifyEmbedUrl from "../spotify/useFetchSpotifyEmbedUrl";
+import TokenManager from "../hooks/TokenManager";
 
-function VinylItem({ vinylItem }) {
-  if (!vinylItem) {
+function CollectionVinylItem({ collectionVinylItem }) {
+  const userClaims = TokenManager.getClaims();
+  const userId = userClaims?.id;
+
+  if (!collectionVinylItem) {
     return <div>Loading details...</div>; // or any other fallback UI
   }
 
-  var { vinylType, title, id, state, spotifyAlbumId } = vinylItem;
+  var { vinylType, title, id, state, spotifyAlbumId } = collectionVinylItem;
 
   // Added a state to toggle visibility of details
   const [showDetails, setShowDetails] = useState(false);
-  const [vinylDetails, setVinylDetails] = useState(false);
+  const [collectionVinylDetails, setCollectionVinylDetails] = useState(null);
   const { embedUrl, loading, error, fetchEmbedUrl } = useFetchSpotifyEmbedUrl();
   const { artistsItems, loading: artistsLoading } = useFetchArtists();
   const { enums } = useVinylEnums();
 
   const handleClickDetails = async () => {
-    await useFetchVinylDetailed(id, setVinylDetails);
-    // Toggle visibility of details
-    setShowDetails((prevState) => !prevState);
-    if (!showDetails) {
-      await fetchEmbedUrl(vinylItem.spotifyAlbumId); // Fetch Spotify embed URL
-      console.log("Spotify? " + vinylItem.spotifyAlbumId);
+    if (!showDetails && !collectionVinylDetails) {
+      await useFetchVinylsCollectionDetails(
+        userId,
+        id,
+        setCollectionVinylDetails
+      );
+      await fetchEmbedUrl(collectionVinylItem.spotifyAlbumId); // Fetch Spotify embed URL
     }
+    setShowDetails((prevState) => !prevState);
   };
 
   // Find the artist name by matching artist_id with fetched artists
   const artistName = artistsItems.find(
-    (artist) => artist.id === vinylDetails?.artist_id
+    (artist) => artist.id === collectionVinylDetails?.artist_id
   )?.name;
 
   const getEnumDisplay = (key, value) =>
@@ -41,34 +47,35 @@ function VinylItem({ vinylItem }) {
       <div className="w-4/5">
         <h3 className="font-semibold text-white">{title}</h3>
         <p className="text-sm text-emerald-400">
-          {getEnumDisplay("vinylTypes", vinylItem.vinylType)}
+          {getEnumDisplay("vinylTypes", collectionVinylItem.vinylType)}
         </p>
         <p className="text-sm text-emerald-400">
-          {getEnumDisplay("states", vinylItem.state)}
+          {getEnumDisplay("states", collectionVinylItem.state)}
         </p>
 
         {/* Display the details only if showDetails is true */}
-        {showDetails && (
+        {showDetails && collectionVinylDetails && (
           <div className="mt-2">
             <p className="text-sm text-emerald-400 break-words">
               Artist: {artistName || " No artist available."}
             </p>
             <p className="text-sm text-emerald-400 break-words">
               Speed:{" "}
-              {getEnumDisplay("speeds", vinylDetails.speed) ||
+              {getEnumDisplay("speeds", collectionVinylDetails.speed) ||
                 " No Speed info available."}
             </p>
             <p className="text-sm text-emerald-400 break-words">
               color:{" "}
-              {getEnumDisplay("colors", vinylDetails.color) ||
+              {getEnumDisplay("colors", collectionVinylDetails.color) ||
                 " No color info available."}
             </p>
             <p className="text-sm text-emerald-400">
-              Released: {vinylDetails.isReleased ? "Yes" : "No"}
+              Released: {collectionVinylDetails.isReleased ? "Yes" : "No"}
             </p>
             <p className="text-sm text-emerald-400 break-words">
               Description:{" "}
-              {vinylDetails.description || " No description available."}
+              {collectionVinylDetails.description ||
+                " No description available."}
             </p>
             <div className="mt-4">
               {loading ? (
@@ -79,7 +86,7 @@ function VinylItem({ vinylItem }) {
                 embedUrl && (
                   <iframe
                     style={{ borderRadius: "12px" }}
-                    src={`https://open.spotify.com/embed/album/${vinylDetails.spotifyAlbumId}?utm_source=generator`} //if i don't want colors add this line: &theme=9
+                    src={`https://open.spotify.com/embed/album/${collectionVinylDetails.spotifyAlbumId}?utm_source=generator`} //if i don't want colors add this line: &theme=9
                     width="50%"
                     height="352"
                     frameBorder="0"
@@ -102,4 +109,4 @@ function VinylItem({ vinylItem }) {
   );
 }
 
-export default VinylItem;
+export default CollectionVinylItem;

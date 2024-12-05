@@ -33,9 +33,14 @@ export default function NavBar({
   const navItems = [
     { name: "Home", icon: Home, path: "/" },
     {
-      name: "Record Collection",
+      name: "Collection",
       icon: LibraryBig,
-      path: "/RecordCollection",
+      path: "/Collection",
+    },
+    {
+      name: "All Vinyls",
+      icon: LibraryBig,
+      path: "/AllVinyls",
     },
     ...(roles.includes("ADMIN")
       ? [{ name: "Vinyls", icon: Disc3, path: "/Vinyls" }]

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import VinylsList from "../components/collectionpage/VinylsList";
-import VinylItem from "../components/collectionpage/VinylItem";
+import VinylsList from "../components/allvinylspage/VinylsList";
+import VinylItem from "../components/allvinylspage/VinylItem";
 import useFetchVinyls from "../components/hooks/useFetchVinyls";
 
 function RecordCollectionPage() {
@@ -22,7 +22,7 @@ function RecordCollectionPage() {
   return (
     <div className="container">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-1xl font-bold">Record Collection</h1>
+        <h1 className="text-1xl font-bold">All Vinyls</h1>
       </div>
       <div className="inner">
         <VinylsList

@@ -13,7 +13,6 @@ export default function useFetchSpotifyEmbedUrl() {
       const response = await fetch(`/spotify-embed?albumId=${spotifyAlbumId}`, {
         headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
       });
-      console.log("Spotify album id " + spotifyAlbumId);
       if (!response.ok) {
         throw new Error("Failed to fetch Spotify embed URL");
       }

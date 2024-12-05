@@ -5,7 +5,8 @@ import NavBar from "./components/general/NavBar";
 import VinylsPage from "./pages/VinylsPage";
 import HomePage from "./pages/HomePage";
 import AuctionsPage from "./pages/AuctionsPage";
-import RecordCollectionPage from "./pages/RecordCollectionPage";
+import AllVinylsPage from "./pages/AllVinylsPage";
+import VinylCollectionPage from "./pages/VinylCollectionPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import PrivateRoute from "./components/general/PrivateRoute";
@@ -43,10 +44,19 @@ function App() {
             }
           />
           <Route
-            path="/RecordCollection"
+            path="/Collection"
             element={
               <PrivateRoute
-                element={<RecordCollectionPage />}
+                element={<VinylCollectionPage />}
+                allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
+              />
+            }
+          />
+          <Route
+            path="/AllVinyls"
+            element={
+              <PrivateRoute
+                element={<AllVinylsPage />}
                 allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
               />
             }
