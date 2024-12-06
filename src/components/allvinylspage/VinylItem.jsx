@@ -7,33 +7,44 @@ import useAddVinylToCollection from "../hooks/useAddVinylToCollection";
 import TokenManager from "../hooks/TokenManager";
 
 function VinylItem({ vinylItem }) {
+  const userClaims = TokenManager.getClaims();
+  const userId = userClaims?.id;
+
   if (!vinylItem) {
-    return <div>Loading details...</div>; // or any other fallback UI
+    return <div>Loading details...</div>;
   }
 
   var { vinylType, title, id, state, spotifyAlbumId } = vinylItem;
 
   // Added a state to toggle visibility of details
   const [showDetails, setShowDetails] = useState(false);
-  const userClaims = TokenManager.getClaims();
-  const userId = userClaims?.id;
-  const [vinylDetails, setVinylDetails] = useState(null);
+
+  // Fetch vinyl details using custom hook
+  const {
+    vinylDetails,
+    loadingVinylDetails,
+    errorLoadingVinylDetails,
+    fetchVinylDetailed,
+  } = useFetchVinylDetailed();
+
   const [collectionVinylsItems, setCollectionVinylsItems] = useState({
     vinyls: [],
   });
+
   const {
     addVinylToCollection,
     loadingAddingCollection,
     errorAddingCollection,
     addedVinylToCollectionMessage,
   } = useAddVinylToCollection(collectionVinylsItems, setCollectionVinylsItems);
+
   const { embedUrl, loading, error, fetchEmbedUrl } = useFetchSpotifyEmbedUrl();
   const { artistsItems, loading: artistsLoading } = useFetchArtists();
   const { enums } = useVinylEnums();
 
   const handleClickDetails = async () => {
     if (!showDetails && !vinylDetails) {
-      await useFetchVinylDetailed(id, setVinylDetails);
+      await fetchVinylDetailed(id);
       await fetchEmbedUrl(vinylItem.spotifyAlbumId); // Fetch Spotify embed URL
     }
     setShowDetails((prevState) => !prevState);
@@ -54,7 +65,7 @@ function VinylItem({ vinylItem }) {
   return (
     <li className="bg-emerald-800 rounded-md p-4 flex justify-between items-center">
       <div className="w-4/5">
-        {/* Error and Success Messages */}
+        {/* Error and Success Messages for adding to collection */}
         {errorAddingCollection && (
           <p className="mt-4 text-lg text-red-500 font-bold">
             {errorAddingCollection}
@@ -73,7 +84,14 @@ function VinylItem({ vinylItem }) {
           {getEnumDisplay("states", vinylItem.state)}
         </p>
 
-        {/* Display the details only if showDetails is true */}
+        {/* Error and Success Messages for vinyl details */}
+        {errorLoadingVinylDetails && (
+          <p className="mt-4 text-lg text-red-500 font-bold">
+            {errorLoadingVinylDetails}
+          </p>
+        )}
+
+        {/* Display the details only if showDetails is true and vinylDetails are fetched */}
         {showDetails && vinylDetails && (
           <div className="mt-2">
             <p className="text-sm text-emerald-400 break-words">
@@ -120,9 +138,14 @@ function VinylItem({ vinylItem }) {
       </div>
       <button
         className="flex items-center px-3 py-2 rounded-md hover:bg-emerald-600 text-emerald-50 hover:text-emerald-900 transition-colors"
-        onClick={handleClickDetails} // Toggle details and pass ID
+        onClick={handleClickDetails}
+        disabled={loadingVinylDetails}
       >
-        {showDetails ? "Hide Details" : "View Details"}
+        {loadingVinylDetails
+          ? "Loading..."
+          : showDetails
+          ? "Hide Details"
+          : "View Details"}
       </button>
 
       <button
