@@ -3,6 +3,8 @@ import useFetchVinylDetailed from "../hooks/useFetchVinylDetailed";
 import useFetchArtists from "../hooks/useFetchArtists";
 import useVinylEnums from "../hooks/useFetchEnums";
 import useFetchSpotifyEmbedUrl from "../spotify/useFetchSpotifyEmbedUrl";
+import useAddVinylToCollection from "../hooks/useAddVinylToCollection";
+import TokenManager from "../hooks/TokenManager";
 
 function VinylItem({ vinylItem }) {
   if (!vinylItem) {
@@ -13,7 +15,18 @@ function VinylItem({ vinylItem }) {
 
   // Added a state to toggle visibility of details
   const [showDetails, setShowDetails] = useState(false);
+  const userClaims = TokenManager.getClaims();
+  const userId = userClaims?.id;
   const [vinylDetails, setVinylDetails] = useState(null);
+  const [collectionVinylsItems, setCollectionVinylsItems] = useState({
+    vinyls: [],
+  });
+  const {
+    addVinylToCollection,
+    loadingAddingCollection,
+    errorAddingCollection,
+    addedVinylToCollectionMessage,
+  } = useAddVinylToCollection(collectionVinylsItems, setCollectionVinylsItems);
   const { embedUrl, loading, error, fetchEmbedUrl } = useFetchSpotifyEmbedUrl();
   const { artistsItems, loading: artistsLoading } = useFetchArtists();
   const { enums } = useVinylEnums();
@@ -24,6 +37,10 @@ function VinylItem({ vinylItem }) {
       await fetchEmbedUrl(vinylItem.spotifyAlbumId); // Fetch Spotify embed URL
     }
     setShowDetails((prevState) => !prevState);
+  };
+
+  const handleAddToCollection = () => {
+    addVinylToCollection(userId, id);
   };
 
   // Find the artist name by matching artist_id with fetched artists
@@ -37,6 +54,17 @@ function VinylItem({ vinylItem }) {
   return (
     <li className="bg-emerald-800 rounded-md p-4 flex justify-between items-center">
       <div className="w-4/5">
+        {/* Error and Success Messages */}
+        {errorAddingCollection && (
+          <p className="mt-4 text-lg text-red-500 font-bold">
+            {errorAddingCollection}
+          </p>
+        )}
+        {addedVinylToCollectionMessage && (
+          <p className="mt-4 text-lg text-emerald-500 font-bold">
+            {addedVinylToCollectionMessage}
+          </p>
+        )}
         <h3 className="font-semibold text-white">{title}</h3>
         <p className="text-sm text-emerald-400">
           {getEnumDisplay("vinylTypes", vinylItem.vinylType)}
@@ -95,6 +123,14 @@ function VinylItem({ vinylItem }) {
         onClick={handleClickDetails} // Toggle details and pass ID
       >
         {showDetails ? "Hide Details" : "View Details"}
+      </button>
+
+      <button
+        className="flex items-center px-3 py-2 rounded-md hover:bg-emerald-600 text-emerald-50 hover:text-emerald-900 transition-colors"
+        onClick={handleAddToCollection}
+        disabled={loadingAddingCollection}
+      >
+        {loadingAddingCollection ? "Adding..." : "Add to Collection"}
       </button>
     </li>
   );

@@ -3,7 +3,7 @@ import VinylsList from "../components/allvinylspage/VinylsList";
 import VinylItem from "../components/allvinylspage/VinylItem";
 import useFetchVinyls from "../components/hooks/useFetchVinyls";
 
-function RecordCollectionPage() {
+function allvinylspage() {
   const [selectedVinylId, setSelectedVinylId] = useState(null);
 
   const {
@@ -24,6 +24,7 @@ function RecordCollectionPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-1xl font-bold">All Vinyls</h1>
       </div>
+
       <div className="inner">
         <VinylsList
           vinylsItems={vinylsItems}
@@ -45,4 +46,4 @@ function RecordCollectionPage() {
   );
 }
 
-export default RecordCollectionPage;
+export default allvinylspage;
