@@ -63,7 +63,7 @@ function VinylItem({ vinylItem }) {
     enums?.[key]?.find((enumValue) => enumValue === value) || value;
 
   return (
-    <li className="bg-emerald-800 rounded-md p-4 flex justify-between items-center">
+    <li className="bg-emerald-800 rounded-md p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div className="w-4/5">
         {/* Error and Success Messages for adding to collection */}
         {errorAddingCollection && (
@@ -124,7 +124,7 @@ function VinylItem({ vinylItem }) {
                   <iframe
                     style={{ borderRadius: "12px" }}
                     src={`https://open.spotify.com/embed/album/${vinylDetails.spotifyAlbumId}?utm_source=generator`} //if i don't want colors add this line: &theme=9
-                    width="50%"
+                    width="100%"
                     height="352"
                     frameBorder="0"
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
