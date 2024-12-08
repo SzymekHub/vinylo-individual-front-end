@@ -5,6 +5,7 @@ import {
   LibraryBig,
   UserPlus,
   ShoppingBasket,
+  MessagesSquare,
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,6 +33,11 @@ export default function NavBar({
 
   const navItems = [
     { name: "Home", icon: Home, path: "/" },
+    {
+      name: "Chat",
+      icon: MessagesSquare,
+      path: "/Chat",
+    },
     {
       name: "Collection",
       icon: LibraryBig,
