@@ -11,6 +11,10 @@ const TokenManager = {
     }
     return JSON.parse(sessionStorage.getItem("claims"));
   },
+  getUsername: () => {
+    const claims = TokenManager.getClaims();
+    return claims ? claims.sub : undefined;
+  },
   getRoles: () => {
     const claims = TokenManager.getClaims();
     return claims?.roles || []; // Assuming roles are stored as an array in the token
