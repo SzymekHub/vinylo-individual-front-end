@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import VinylsList from "../components/allvinylspage/VinylsList";
 import VinylItem from "../components/allvinylspage/VinylItem";
 import useFetchVinyls from "../components/hooks/useFetchVinyls";
 
-function allvinylspage() {
+function Allvinylspage() {
   const [selectedVinylId, setSelectedVinylId] = useState(null);
 
   const {
     vinylsItems,
     loading: loadingVinyls,
     error: fetchError,
+    currentPage, // Get currentPage from useFetchVinyls
+    totalPages, // Get totalPages from useFetchVinyls
+    handlePageChange,
   } = useFetchVinyls();
 
   const handleViewDetails = (id) => {
@@ -28,7 +31,12 @@ function allvinylspage() {
       <div className="inner">
         <VinylsList
           vinylsItems={vinylsItems}
-          onViewDetails={handleViewDetails} // Pass the handler here
+          loading={loadingVinyls}
+          error={fetchError}
+          currentPage={currentPage} // Pass currentPage
+          totalPages={totalPages} // Pass totalPages
+          handlePageChange={handlePageChange}
+          onViewDetails={handleViewDetails}
         />
       </div>
 
@@ -46,4 +54,4 @@ function allvinylspage() {
   );
 }
 
-export default allvinylspage;
+export default Allvinylspage;
