@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import useFetchVinylDetailed from "../hooks/useFetchVinylDetailed";
-import useFetchArtists from "../hooks/useFetchArtists";
-import useVinylEnums from "../hooks/useFetchEnums";
+import useFetchVinylDetailed from "../hooks/fetch/useFetchVinylDetailed";
+import useFetchArtists from "../hooks/fetch/useFetchArtists";
+import useVinylEnums from "../hooks/fetch/useFetchEnums";
 import useFetchSpotifyEmbedUrl from "../spotify/useFetchSpotifyEmbedUrl";
-import useAddVinylToCollection from "../hooks/useAddVinylToCollection";
+import useAddVinylToCollection from "../hooks/add/useAddVinylToCollection";
 import TokenManager from "../hooks/TokenManager";
 
 function VinylItem({ vinylItem }) {

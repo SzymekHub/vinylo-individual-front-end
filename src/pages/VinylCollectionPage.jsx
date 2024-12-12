@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CollectionVinylsList from "../components/usercollectionpage/CollectionVinylsList";
 import CollectionVinylItem from "../components/usercollectionpage/CollectionVinylItem";
-import useFetchCollectionVinyls from "../components/hooks/useFetchVinylsCollections";
+import useFetchCollectionVinyls from "../components/hooks/fetch/useFetchVinylsCollections";
 import TokenManager from "../components/hooks/TokenManager";
 
 function VinylCollectionPage() {

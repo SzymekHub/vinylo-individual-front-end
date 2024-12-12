@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
-import TokenManager from "./TokenManager";
-import useVinylEnums from "./useFetchEnums";
+import TokenManager from "../TokenManager";
+import useVinylEnums from "../fetch/useFetchEnums";
 
 const useAddVinyl = (vinylsItems, setVinylsItems) => {
   const { enums, loading: enumsLoading, error: enumsError } = useVinylEnums();

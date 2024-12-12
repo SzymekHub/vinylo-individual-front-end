@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import VinylsList from "../components/allvinylspage/VinylsList";
 import VinylItem from "../components/allvinylspage/VinylItem";
-import useFetchVinyls from "../components/hooks/useFetchVinyls";
+import useFetchVinyls from "../components/hooks/fetch/useFetchVinyls";
 
 function Allvinylspage() {
   const [selectedVinylId, setSelectedVinylId] = useState(null);

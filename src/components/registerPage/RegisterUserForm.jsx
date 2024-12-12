@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useAddUser from "../hooks/useAddUser";
+import useAddUser from "../hooks/add/useAddUser";
 
 const RegisterUserForm = () => {
   const [usersItems, setUsersItems] = useState({ users: [] });

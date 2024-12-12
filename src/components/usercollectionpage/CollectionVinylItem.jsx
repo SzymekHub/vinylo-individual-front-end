@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import useFetchVinylsCollectionDetails from "../hooks/useFetchVinylsCollectionDetails";
-import useFetchArtists from "../hooks/useFetchArtists";
-import useVinylEnums from "../hooks/useFetchEnums";
+import useFetchVinylsCollectionDetails from "../hooks/fetch/useFetchVinylsCollectionDetails";
+import useFetchArtists from "../hooks/fetch/useFetchArtists";
+import useVinylEnums from "../hooks/fetch/useFetchEnums";
 import useFetchSpotifyEmbedUrl from "../spotify/useFetchSpotifyEmbedUrl";
 import TokenManager from "../hooks/TokenManager";
 

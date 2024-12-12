@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import TokenManager from "./TokenManager";
+import TokenManager from "../TokenManager";
 
 export default function useFetchVinylDetailed() {
   const [vinylDetails, setVinylDetails] = useState(null);

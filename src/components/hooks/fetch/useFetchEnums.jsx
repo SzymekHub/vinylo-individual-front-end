@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import TokenManager from "./TokenManager";
+import TokenManager from "../TokenManager";
 
 const useVinylEnums = () => {
   const [enums, setEnums] = useState(null);

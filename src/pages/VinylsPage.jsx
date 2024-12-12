@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import InputVinyl from "../components/addvinylpage/InputVinyl";
-import useAddVinyl from "../components/hooks/useAddVinyl";
+import useAddVinyl from "../components/hooks/add/useAddVinyl";
 
 function VinylsPage() {
   const [vinylsItems, setVinylsItems] = useState([]); // Initialize empty state for vinyls

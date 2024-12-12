@@ -1,5 +1,5 @@
 import axios from "axios";
-import tokenManager from "../hooks/TokenManager";
+import tokenManager from "../TokenManager";
 
 const useFetchUsers = {
   getUser: (id) =>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import TokenManager from "./TokenManager";
+import TokenManager from "../TokenManager";
 
 const useFetchArtists = () => {
   const [artistsItems, setArtistsItems] = useState([]);

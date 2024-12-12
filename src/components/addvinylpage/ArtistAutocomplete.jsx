@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from "@mui/material";
-import useFetchArtists from "../hooks/useFetchArtists";
+import useFetchArtists from "../hooks/fetch/useFetchArtists";
 
 const ArtistAutocomplete = ({ artistId, setArtistId }) => {
   const { filteredArtists, loading, error } = useFetchArtists();

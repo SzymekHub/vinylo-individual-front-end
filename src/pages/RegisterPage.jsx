@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RegisterUserForm from "../components/registerPage/RegisterUserForm";
-import useAddUser from "../components/hooks/useAddUser";
+import useAddUser from "../components/hooks/add/useAddUser";
 
 const RegisterPage = () => {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useVinylEnums from "../hooks/useFetchEnums";
+import useVinylEnums from "../hooks/fetch/useFetchEnums";
 import ArtistAutocomplete from "./ArtistAutocomplete";
 
 function InputVinyl(props) {
