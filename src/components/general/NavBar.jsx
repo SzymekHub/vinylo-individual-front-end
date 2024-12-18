@@ -44,6 +44,16 @@ export default function NavBar({
       path: "/Collection",
     },
     {
+      name: "Sell Vinyls",
+      icon: ShoppingBasket,
+      path: "/SellAuctions",
+    },
+    {
+      name: "Auctions",
+      icon: ShoppingBasket,
+      path: "/Auctions",
+    },
+    {
       name: "All Vinyls",
       icon: LibraryBig,
       path: "/AllVinyls",
@@ -51,7 +61,6 @@ export default function NavBar({
     ...(roles.includes("ADMIN")
       ? [{ name: "Vinyls", icon: Disc3, path: "/Vinyls" }]
       : []),
-    { name: "Auctions", icon: ShoppingBasket, path: "/Auctions" },
     { name: "Logout", icon: DoorOpen, onClick: handleLogout },
   ];
 

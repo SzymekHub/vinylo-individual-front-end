@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import useVinylEnums from "../hooks/fetch/useFetchEnums";
 import ArtistAutocomplete from "./ArtistAutocomplete";
+import useAddVinyl from "../hooks/add/useAddVinyl";
 
-function InputVinyl(props) {
+function InputVinyl() {
   const { enums, loading: enumsLoading, error: enumsError } = useVinylEnums();
-  const [vinylType, setVinylType] = useState("");
   const [artistId, setArtistId] = useState(null); // Stores artist ID
-  const [title, setTitle] = useState("");
-  const [speed, setSpeed] = useState("");
-  const [state, setState] = useState("");
-  const [color, setColor] = useState("");
   const [isReleased, setIsReleased] = useState(false);
   const [description, setDescription] = useState("");
   const [spotifyAlbumId, setSpotifyAlbumId] = useState("");
+
+  const [vinylsItems, setVinylsItems] = useState({ vinyls: [] });
+  const { addVinyl, loading, error, addedVinylMessage } = useAddVinyl(
+    vinylsItems,
+    setVinylsItems
+  );
 
   if (enumsLoading) return <p>Loading enums...</p>;
   if (enumsError) return <p>Error loading enums: {enumsError}</p>;
@@ -21,24 +23,15 @@ function InputVinyl(props) {
     // Prevent the default form submission behavior
     e.preventDefault();
 
-    if (
-      !artistId ||
-      !title ||
-      !description ||
-      !vinylType ||
-      !speed ||
-      !state ||
-      !color
-    ) {
-      setError("Please fill in all fields.");
-      return;
-    }
+    const vinylType = e.target.vinylType.value;
+    const title = e.target.title.value;
+    const speed = e.target.speed.value;
+    const state = e.target.state.value;
+    const color = e.target.color.value;
+    const description = e.target.description.value;
+    const spotifyAlbumId = e.target.spotifyAlbumId.value;
 
-    // Log the artist id, not the whole object
-    console.log("Selected Artist ID: ", artistId); // Logs the artist ID
-
-    // Now passing the artistId instead of the full artist object
-    props.addItem(
+    addVinyl(
       vinylType,
       artistId,
       title,
@@ -49,47 +42,6 @@ function InputVinyl(props) {
       description,
       spotifyAlbumId
     );
-
-    // Clear the form fields
-    setVinylType("");
-    setArtistId(null);
-    setTitle("");
-    setSpeed("");
-    setState("");
-    setColor("");
-    setIsReleased(false);
-    setDescription("");
-    setSpotifyAlbumId("");
-  };
-
-  const textChanged = (e) => {
-    const { name, value } = e.target;
-    // Update the corresponding field based on the input name
-    switch (name) {
-      case "vinylType":
-        setVinylType(value);
-        break;
-      case "title":
-        setTitle(value);
-        break;
-      case "speed":
-        setSpeed(value);
-        break;
-      case "state":
-        setState(value);
-        break;
-      case "color":
-        setColor(value);
-        break;
-      case "description":
-        setDescription(value);
-        break;
-      case "spotifyAlbumId":
-        setSpotifyAlbumId(value);
-        break;
-      default:
-        break;
-    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -109,11 +61,10 @@ function InputVinyl(props) {
         <div>
           <p className="font-bold sm:text-1xl text-emerald-500">Vinyl Type :</p>
           <select
+            required
             id="vinylType"
             name="vinylType"
             className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
-            value={vinylType}
-            onChange={(e) => setVinylType(e.target.value)}
           >
             <option value="">Select Vinyl Type</option>
             {enums?.vinylTypes?.map((type) => (
@@ -138,8 +89,7 @@ function InputVinyl(props) {
               name="title"
               className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
               placeholder="Enter vinyl title"
-              value={title}
-              onChange={textChanged}
+              required
             />
           </div>
         </div>
@@ -152,8 +102,7 @@ function InputVinyl(props) {
             id="speed"
             name="speed"
             className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
-            value={speed}
-            onChange={(e) => setSpeed(e.target.value)}
+            required
           >
             <option value="">Select Speed</option>
             {enums?.speeds?.map((sp) => (
@@ -172,8 +121,7 @@ function InputVinyl(props) {
             id="state"
             name="state"
             className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
+            required
           >
             <option value="">Select State</option>
             {enums?.states?.map((st) => (
@@ -192,8 +140,7 @@ function InputVinyl(props) {
             id="color"
             name="color"
             className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
+            required
           >
             <option value="">Select Color</option>
             {enums?.colors?.map((clr) => (
@@ -211,6 +158,7 @@ function InputVinyl(props) {
               checked={isReleased}
               onChange={handleCheckboxChange}
               className="rounded border-emerald-700 bg-emerald-800 text-emerald-500 shadow-sm focus:ring-emerald-500"
+              required
             />
             <span className="ml-2 text-emerald-100">Is Released</span>
           </label>
@@ -231,8 +179,9 @@ function InputVinyl(props) {
               placeholder="Enter vinyl description"
               rows="3"
               maxLength={150}
-              value={description}
-              onChange={textChanged}
+              value={description} // Bind value to state
+              onChange={(e) => setDescription(e.target.value)} // Update state on change
+              required
             />
             <div className="text-emerald-400 text-sm text-right">
               {description.length}/150
@@ -255,7 +204,8 @@ function InputVinyl(props) {
               rows="3"
               maxLength={666}
               value={spotifyAlbumId}
-              onChange={textChanged}
+              onChange={(e) => setSpotifyAlbumId(e.target.value)} // Update state on change
+              required
             />
             <div className="text-emerald-400 text-sm text-right">
               {spotifyAlbumId.length}/666
@@ -263,15 +213,23 @@ function InputVinyl(props) {
           </div>
         </div>
 
+        {/* Submit Button */}
         <div className="flex items-center justify-between ">
           <button
             type="submit"
             className="inline-block rounded-lg bg-emerald-600 px-5 py-3 text-sm font-medium text-white hover:bg-emerald-700 transition-colors"
+            disabled={loading}
           >
-            Add more vinyls!
+            {loading ? "Adding..." : "Add more vinyls!"}
           </button>
         </div>
       </form>
+
+      {/* Error and Success Messages */}
+      {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
+      {addedVinylMessage && (
+        <p className="mt-4 text-sm text-emerald-500">{addedVinylMessage}</p>
+      )}
     </div>
   );
 }

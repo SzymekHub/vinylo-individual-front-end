@@ -44,7 +44,7 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
       return;
     }
 
-    const newItem = {
+    const newVinyl = {
       vinylType,
       artist_id: artistId, // Use artistId here
       title,
@@ -59,15 +59,13 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
     try {
       const response = await axios.post(
         "http://localhost:8080/vinyls",
-        newItem,
+        newVinyl,
         {
           headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
         }
       );
 
       if (response && response.data) {
-        console.log("Vinyl added successfully:", response.data);
-
         // Add the new item with the DB-assigned ID to the state
         const tempVinylsItems = {
           vinyls: [...(vinylsItems?.vinyls || []), response.data], // Default to empty array if undefined
@@ -76,23 +74,21 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
         setVinylsItems(tempVinylsItems);
 
         // Set the success message
-        setAddedVinylMessage("Vinyl created successfully" + response.data);
+        setAddedVinylMessage("Vinyl created successfully: " + newVinyl.title);
       }
     } catch (error) {
       if (error.response) {
-        console.error("Error adding vinyl:", error.response);
-
         if (
           error.response.status === 400 &&
           error.response.data ===
-            "Vinyl already exists with the same title and artist."
+            '400 BAD_REQUEST "Vinyl already exists with the same title and artist"'
         ) {
-          setError("A vinyl with the same title and artist already exists.");
+          alert("Error: Duplicate vinyl");
         } else {
           setError("An error occurred: " + error.response.data);
         }
       } else {
-        console.error("An unexpected error occurred:", error);
+        console.error("An unexpected error occurred: ", error);
         setError("An unexpected error occurred");
       }
     } finally {

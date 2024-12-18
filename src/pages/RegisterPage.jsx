@@ -14,9 +14,7 @@ const RegisterPage = () => {
   const handleRegister = async (username, email, password) => {
     try {
       await registerUser(username, email, password);
-      if (registeredUserMessage) {
-        navigate("/login"); // Redirect to Login page on success
-      }
+      navigate("/login"); // Redirect to Login page on success
     } catch (err) {
       console.error("Registration failed:", err.message);
     }

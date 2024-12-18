@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import InputVinyl from "../components/addvinylpage/InputVinyl";
 import useAddVinyl from "../components/hooks/add/useAddVinyl";
 
 function VinylsPage() {
-  const [vinylsItems, setVinylsItems] = useState([]); // Initialize empty state for vinyls
+  const navigate = useNavigate();
+  const [vinylsItems, setVinylsItems] = useState({ vinyls: [] }); // Initialize empty state for vinyls
 
   const {
     addVinyl,
@@ -12,15 +14,45 @@ function VinylsPage() {
     error: addError,
   } = useAddVinyl(vinylsItems, setVinylsItems);
 
+  const handleAddedVinyl = async (
+    vinylType,
+    artistId,
+    title,
+    speed,
+    state,
+    color,
+    isReleased,
+    description,
+    spotifyAlbumId
+  ) => {
+    try {
+      await addVinyl(
+        vinylType,
+        artistId,
+        title,
+        speed,
+        state,
+        color,
+        isReleased,
+        description,
+        spotifyAlbumId
+      );
+      navigate("/AllVinyls");
+    } catch (error) {
+      console.error("Adding a vinyl failed, ", error.message);
+    }
+  };
+
   return (
     <div className="container">
       <div className="inner">
-        <InputVinyl addItem={addVinyl} loading={addingLoading} />
-
-        {addError && <div>Error adding vinyl: {addError}</div>}
-        {addedVinylMessage && (
-          <div> Successfully added a vinyl: {addedVinylMessage} </div>
-        )}
+        <InputVinyl
+          addItem={addVinyl}
+          onSubmit={handleAddedVinyl}
+          loading={addingLoading}
+          error={addError}
+          addedVinylMessage={addedVinylMessage}
+        />
       </div>
     </div>
   );

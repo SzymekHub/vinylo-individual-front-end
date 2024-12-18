@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/general/NavBar";
 import VinylsPage from "./pages/VinylsPage";
 import HomePage from "./pages/HomePage";
-import AuctionsPage from "./pages/AuctionsPage";
+import SellAuctionPage from "./pages/SellAuctionPage";
+import AllAuctionsPage from "./pages/AllAuctionsPage";
 import AllVinylsPage from "./pages/AllVinylsPage";
 import VinylCollectionPage from "./pages/VinylCollectionPage";
 import LoginPage from "./pages/LoginPage";
@@ -36,10 +37,19 @@ function App() {
             }
           />
           <Route
+            path="/SellAuctions"
+            element={
+              <PrivateRoute
+                element={<SellAuctionPage />}
+                allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
+              />
+            }
+          />
+          <Route
             path="/Auctions"
             element={
               <PrivateRoute
-                element={<AuctionsPage />}
+                element={<AllAuctionsPage />}
                 allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
               />
             }

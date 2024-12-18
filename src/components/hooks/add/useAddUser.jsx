@@ -24,8 +24,6 @@ const useAddUser = (usersItems, setUsersItems) => {
       const response = await axios.post("http://localhost:8080/users", newUser);
 
       if (response && response.data) {
-        console.log("User registered successfully:");
-
         // Add the new user with the DB-assigned ID to the state
         const tempUsersItems = {
           users: [...(usersItems?.users || []), response.data], // Default to empty array if undefined
@@ -48,7 +46,7 @@ const useAddUser = (usersItems, setUsersItems) => {
         ) {
           alert("Error: Duplicate user");
         } else {
-          setError("User already exists " + error.response.data);
+          setError("An error occurred " + error.response.data);
         }
       } else {
         console.error("An unexpected error occurred:", error);
