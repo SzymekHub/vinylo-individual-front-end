@@ -31,8 +31,6 @@ const useAddVinylToCollection = (
       );
 
       if (response && response.data) {
-        console.log("Vinyl added to collection successfully:", response.data);
-
         // Add the new item with the DB-assigned ID to the state
         const tempCollectionVinylsItems = {
           vinyls: [...(collectionVinylsItems?.vinyls || []), response.data], // Default to empty array if undefined
@@ -47,8 +45,6 @@ const useAddVinylToCollection = (
       }
     } catch (error) {
       if (error.response) {
-        console.error("Error adding vinyl to collection: ", error.response);
-
         if (
           error.response.status === 400 &&
           error.response.data ===
@@ -59,7 +55,6 @@ const useAddVinylToCollection = (
           setErrorAddingCollection("An error occurred: " + error.response.data);
         }
       } else {
-        console.error("An unexpected error occurred:", error);
         setErrorAddingCollection("An unexpected error occurred");
       }
     } finally {

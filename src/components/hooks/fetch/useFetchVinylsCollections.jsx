@@ -26,9 +26,7 @@ const useFetchCollectionVinyls = (userId) => {
         );
 
         setCollectionVinylsItems(response.data.vinyls);
-        console.log("Fetched user vinyls: ", response.data);
       } catch (error) {
-        console.error("There was an error fetching the user vinyls:", error);
         setError(error);
       } finally {
         setLoading(false);

@@ -44,8 +44,6 @@ const useAddUser = (usersItems, setUsersItems, onRegisterSuccess) => {
       }
     } catch (error) {
       if (error.response) {
-        console.error("Error registering user:", error.response);
-
         if (
           error.response.status === 400 &&
           error.response.data === '400 BAD_REQUEST "User already exists"'
@@ -55,7 +53,6 @@ const useAddUser = (usersItems, setUsersItems, onRegisterSuccess) => {
           setError("An error occurred " + error.response.data);
         }
       } else {
-        console.error("An unexpected error occurred:", error);
         setError("An unexpected error occurred");
       }
     } finally {

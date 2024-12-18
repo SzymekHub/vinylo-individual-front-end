@@ -12,9 +12,7 @@ const RegisterPage = () => {
   const handleRegister = async (username, email, password) => {
     try {
       await registerUser(username, email, password);
-    } catch (err) {
-      console.error("Registration failed:", err.message);
-    }
+    } catch (err) {}
   };
 
   const handleSuccess = (username) => {

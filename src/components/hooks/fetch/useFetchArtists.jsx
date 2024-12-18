@@ -19,7 +19,6 @@ const useFetchArtists = () => {
         setArtistsItems(response.data.artists);
         setFilteredArtists(response.data.artists); // Filter based on certain conditions if needed
       } catch (error) {
-        console.error("There was an error fetching the artists: ", error);
         setError(error);
       } finally {
         setLoading(false);

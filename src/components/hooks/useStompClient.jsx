@@ -17,7 +17,6 @@ export const useStompClient = (url) => {
     client.onConnect = () => {
       // subscribe to the backend public topic
       client.subscribe("/topic/publicmessages", (data) => {
-        console.log(data);
         onMessageReceived(data);
       });
 
@@ -37,7 +36,6 @@ export const useStompClient = (url) => {
   // send the data using Stomp
   const sendMessage = (destination, payload) => {
     if (!stompClient) {
-      console.error("Stomp client is not connected");
       return;
     }
     stompClient.publish({

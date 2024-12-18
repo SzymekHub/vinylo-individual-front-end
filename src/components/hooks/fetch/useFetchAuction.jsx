@@ -27,7 +27,6 @@ const useFetchAuctions = () => {
         setAuctionsItems(response.data.auctions);
         setTotalPages(response.data.totalPages); // Directly set total pages
       } catch (error) {
-        console.error("Error fetching auctions:", error);
         setError(error);
       } finally {
         setLoading(false);

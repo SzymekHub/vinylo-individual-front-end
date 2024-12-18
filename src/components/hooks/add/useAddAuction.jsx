@@ -79,7 +79,6 @@ const useAddAuction = (auctionsItems, setAuctionsItems) => {
           setError("An error occurred: " + error.response.data);
         }
       } else {
-        console.error("An unexpected error occurred: ", error);
         setError("An unexpected error occurred");
       }
     } finally {

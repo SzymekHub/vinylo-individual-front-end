@@ -36,9 +36,7 @@ function SellAuctionPage() {
         endTime
       );
       navigate("/Auctions");
-    } catch (error) {
-      console.error("Adding an auction failed, ", error.message);
-    }
+    } catch (error) {}
   };
 
   return (

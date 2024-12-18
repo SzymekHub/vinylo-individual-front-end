@@ -26,7 +26,6 @@ function LoginPage({ setClaims }) {
       })
       .catch((error) => {
         alert("Login failed!");
-        console.error(error);
       });
   };
 

@@ -57,7 +57,6 @@ function AuctionItem({ auctionItem }) {
     )?.spotifyAlbumId;
 
     if (!vinylId) {
-      console.error("Vinyl ID not found for this auction.");
       return; // Exit if no vinyl ID is available
     }
 
@@ -66,9 +65,7 @@ function AuctionItem({ auctionItem }) {
         // Fetch the vinyl details using the correct ID
         await fetchVinylDetailed(vinylId);
         await fetchEmbedUrl(spotifyAlbumId);
-      } catch (error) {
-        console.error("Failed to fetch vinyl details:", error);
-      }
+      } catch (error) {}
     }
     setShowVinylDetails((prevState) => !prevState); // Toggle vinyl details visibility
   };
@@ -80,9 +77,7 @@ function AuctionItem({ auctionItem }) {
         try {
           const seller = await useFetchUsers.getUser(auctionDetails.seller_id);
           setSellerUsername(seller.username);
-        } catch (error) {
-          console.error("Failed to fetch seller details:", error);
-        }
+        } catch (error) {}
       }
     };
 

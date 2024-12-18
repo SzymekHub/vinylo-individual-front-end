@@ -27,7 +27,6 @@ const useFetchVinyls = () => {
         setVinylsItems(response.data.vinyls);
         setTotalPages(response.data.totalPages); // Directly set total pages
       } catch (error) {
-        console.error("Error fetching vinyls:", error);
         setError(error);
       } finally {
         setLoading(false);

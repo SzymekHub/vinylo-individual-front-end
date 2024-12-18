@@ -38,9 +38,7 @@ function VinylsPage() {
         spotifyAlbumId
       );
       navigate("/AllVinyls");
-    } catch (error) {
-      console.error("Adding a vinyl failed, ", error.message);
-    }
+    } catch (error) {}
   };
 
   return (
