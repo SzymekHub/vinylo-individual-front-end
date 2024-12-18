@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import useAddUser from "../hooks/add/useAddUser";
 
-const RegisterUserForm = () => {
+const RegisterUserForm = ({ onRegisterSuccess }) => {
   const [usersItems, setUsersItems] = useState({ users: [] });
   const { registerUser, loading, error, registeredUserMessage } = useAddUser(
     usersItems,
-    setUsersItems
+    setUsersItems,
+    onRegisterSuccess
   );
 
   const handleSubmit = (e) => {

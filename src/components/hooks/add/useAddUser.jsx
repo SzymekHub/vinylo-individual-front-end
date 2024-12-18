@@ -1,17 +1,20 @@
 import { useState } from "react";
 import axios from "axios";
 
-const useAddUser = (usersItems, setUsersItems) => {
+const useAddUser = (usersItems, setUsersItems, onRegisterSuccess) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   // State for success message
-  const [registeredUserMessage, setRegisteredUserMessage] = useState(""); // State for success message
+  const [registeredUserMessage, setRegisteredUserMessage] = useState("");
+  const [username, setUsername] = useState("");
 
   const registerUser = async (username, email, password) => {
     setLoading(true);
     setError(null);
     // Clear any previous success message
     setRegisteredUserMessage("");
+    // Store the username in the state
+    setUsername(username);
 
     const newUser = {
       username,
@@ -35,6 +38,9 @@ const useAddUser = (usersItems, setUsersItems) => {
         setRegisteredUserMessage(
           "User registered successfully: " + newUser.username
         );
+
+        // Trigger the success callback
+        onRegisterSuccess(newUser.username);
       }
     } catch (error) {
       if (error.response) {
@@ -57,7 +63,7 @@ const useAddUser = (usersItems, setUsersItems) => {
     }
   };
 
-  return { registerUser, loading, error, registeredUserMessage };
+  return { registerUser, loading, error, registeredUserMessage, username };
 };
 
 export default useAddUser;

@@ -6,18 +6,21 @@ import useAddUser from "../components/hooks/add/useAddUser";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [usersItems, setUsersItems] = useState({ users: [] });
-  const { registerUser, loading, error, registeredUserMessage } = useAddUser(
-    usersItems,
-    setUsersItems
-  );
+  const { registerUser, loading, error, registeredUserMessage, username } =
+    useAddUser(usersItems, setUsersItems);
 
   const handleRegister = async (username, email, password) => {
     try {
       await registerUser(username, email, password);
-      navigate("/login"); // Redirect to Login page on success
     } catch (err) {
       console.error("Registration failed:", err.message);
     }
+  };
+
+  const handleSuccess = (username) => {
+    // Success callback: Popup message and redirect to Login
+    alert("Registration successful! " + username);
+    navigate("/Login");
   };
 
   return (
@@ -27,6 +30,7 @@ const RegisterPage = () => {
         loading={loading}
         error={error}
         registeredUserMessage={registeredUserMessage}
+        onRegisterSuccess={handleSuccess}
       />
     </div>
   );
