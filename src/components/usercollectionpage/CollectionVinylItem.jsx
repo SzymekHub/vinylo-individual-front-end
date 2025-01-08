@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useFetchVinylsCollectionDetails from "../hooks/fetch/useFetchVinylsCollectionDetails";
 import useFetchArtists from "../hooks/fetch/useFetchArtists";
 import useVinylEnums from "../hooks/fetch/useFetchEnums";
 import useFetchSpotifyEmbedUrl from "../spotify/useFetchSpotifyEmbedUrl";
+import useDeleteVinylFromCollection from "../hooks/delete/useDeleteVinylFromCollection";
 import TokenManager from "../hooks/TokenManager";
 
 function CollectionVinylItem({ collectionVinylItem }) {
@@ -10,12 +11,14 @@ function CollectionVinylItem({ collectionVinylItem }) {
   const userId = userClaims?.id;
 
   if (!collectionVinylItem) {
-    return <div>Loading details...</div>; // or any other fallback UI
+    return <div>Loading details...</div>;
   }
 
   var { vinylType, title, id, state, spotifyAlbumId } = collectionVinylItem;
 
-  // Added a state to toggle visibility of details
+  const [collectionVinylItemState, setCollectionVinylItemState] =
+    useState(collectionVinylItem);
+
   const [showDetails, setShowDetails] = useState(false);
 
   const {
@@ -25,19 +28,41 @@ function CollectionVinylItem({ collectionVinylItem }) {
     fetchVinylsCollectionDetails,
   } = useFetchVinylsCollectionDetails();
 
+  const {
+    deleteVinylFromCollection,
+    loadingDeletingCollection,
+    errorDeletingCollection,
+    registerSetCollectionVinylsItems,
+  } = useDeleteVinylFromCollection();
+
   const { embedUrl, loading, error, fetchEmbedUrl } = useFetchSpotifyEmbedUrl();
   const { artistsItems, loading: artistsLoading } = useFetchArtists();
   const { enums } = useVinylEnums();
 
-  const handleClickDetails = async () => {
-    if (!showDetails && !vinylCollectionDetails) {
-      await fetchVinylsCollectionDetails(userId, id);
-      await fetchEmbedUrl(collectionVinylItem.spotifyAlbumId); // Fetch Spotify embed URL
+  // Fetch details when needed
+  useEffect(() => {
+    if (showDetails && !vinylCollectionDetails) {
+      console.log("Fetching collection details...");
+      fetchVinylsCollectionDetails(userId, id);
+      fetchEmbedUrl(collectionVinylItem.spotifyAlbumId);
     }
+  }, [
+    showDetails,
+    userId,
+    id,
+    vinylCollectionDetails,
+    fetchVinylsCollectionDetails,
+  ]);
+
+  const handleClickDetails = () => {
     setShowDetails((prevState) => !prevState);
   };
 
-  // Find the artist name by matching artist_id with fetched artists
+  const handleDeleteFromCollection = () => {
+    console.log("Deleting vinyl with ID:", collectionVinylItem?.id);
+    deleteVinylFromCollection(collectionVinylItem?.id);
+  };
+
   const artistName = artistsItems.find(
     (artist) => artist.id === vinylCollectionDetails?.artist_id
   )?.name;
@@ -71,9 +96,23 @@ function CollectionVinylItem({ collectionVinylItem }) {
           >
             {showDetails ? "Hide Details" : "View Details"}
           </button>
+          <button
+            onClick={handleDeleteFromCollection}
+            className="flex items-center px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-white rounded-full hover:text-emerald-900 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-opacity-50"
+            disabled={loadingDeletingCollection}
+          >
+            {loadingDeletingCollection
+              ? "Deleting..."
+              : "Delete from Collection"}
+          </button>
         </div>
       </div>
 
+      {errorDeletingCollection && (
+        <p className="mt-4 text-lg text-red-500 font-bold">
+          {errorDeletingCollection}
+        </p>
+      )}
       {errorLoadingCollectionVinylDetails && (
         <p className="mt-4 text-lg text-red-500 font-bold">
           {errorLoadingCollectionVinylDetails}
