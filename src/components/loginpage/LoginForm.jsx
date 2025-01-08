@@ -22,8 +22,11 @@ function LoginForm(props) {
             <div className="rounded-lg shadow-lg bg-gradient-to-br from-emerald-800/50 to-gray-900/50 backdrop-blur-sm p-8">
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="username" className="sr-only">
-                    Username
+                  <label
+                    htmlFor="username"
+                    className="block text-sm font-medium text-emerald-300"
+                  >
+                    Username :
                   </label>
                   <input
                     id="username"
@@ -37,8 +40,11 @@ function LoginForm(props) {
                   />
                 </div>
                 <div>
-                  <label htmlFor="password" className="sr-only">
-                    Password
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-emerald-300"
+                  >
+                    Password :
                   </label>
                   <input
                     id="password"
