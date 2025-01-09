@@ -6,6 +6,7 @@ import {
   UserPlus,
   ShoppingBasket,
   MessagesSquare,
+  CircleUserRound,
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -62,6 +63,11 @@ export default function NavBar({
     ...(roles.includes("ADMIN")
       ? [{ name: "Vinyls", icon: Disc3, path: "/Vinyls" }]
       : []),
+    {
+      name: "Profile",
+      icon: CircleUserRound,
+      path: "/Profile",
+    },
     { name: "Logout", icon: DoorOpen, onClick: handleLogout },
   ];
 

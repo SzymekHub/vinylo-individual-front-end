@@ -13,6 +13,7 @@ import RegisterPage from "./pages/RegisterPage";
 import PrivateRoute from "./components/general/PrivateRoute";
 import TokenManager from "./components/hooks/TokenManager";
 import ChatPage from "./pages/ChatPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   const [claims, setClaims] = useState(TokenManager.getClaims());
@@ -77,6 +78,15 @@ function App() {
             element={
               <PrivateRoute
                 element={<AllVinylsPage />}
+                allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
+              />
+            }
+          />
+          <Route
+            path="/Profile"
+            element={
+              <PrivateRoute
+                element={<ProfilePage />}
                 allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
               />
             }
