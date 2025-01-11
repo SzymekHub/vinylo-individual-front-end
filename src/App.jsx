@@ -14,6 +14,7 @@ import PrivateRoute from "./components/general/PrivateRoute";
 import TokenManager from "./components/hooks/TokenManager";
 import ChatPage from "./pages/ChatPage";
 import ProfilePage from "./pages/ProfilePage";
+import UpgradePage from "./pages/UpgradePage";
 
 function App() {
   const [claims, setClaims] = useState(TokenManager.getClaims());
@@ -88,6 +89,15 @@ function App() {
               <PrivateRoute
                 element={<ProfilePage />}
                 allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
+              />
+            }
+          />
+          <Route
+            path="/Upgrade"
+            element={
+              <PrivateRoute
+                element={<UpgradePage />}
+                allowedRoles={["REGULAR", "ADMIN"]}
               />
             }
           />

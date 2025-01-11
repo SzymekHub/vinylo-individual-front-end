@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
 
-function Notification({ type, message, duration = 5000 }) {
+function Notification({ type, message, duration = 5000, onClose }) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     if (isVisible && duration > 0) {
       const timer = setTimeout(() => {
         setIsVisible(false);
+        if (onClose) {
+          onClose();
+        }
       }, duration);
 
       // Cleanup the timer if the component unmounts or the duration changes
       return () => clearTimeout(timer);
     }
     // Include duration in the dependency array to re-run the effect when it changes
-  }, [isVisible, duration]);
+  }, [isVisible, duration, onClose]);
 
   const handleClose = () => {
     setIsVisible(false);
+    if (onClose) {
+      onClose();
+    }
   };
 
   if (!isVisible) {
