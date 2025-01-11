@@ -25,6 +25,7 @@ export default function useFetchProfile() {
 
   return {
     profileDetails,
+    setProfileDetails,
     loadingProfileDetails,
     errorLoadingProfileDetails,
     fetchProfileDetailed,

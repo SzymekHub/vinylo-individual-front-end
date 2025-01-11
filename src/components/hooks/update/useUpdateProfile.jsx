@@ -1,32 +1,77 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
+import { Client } from "@stomp/stompjs";
 
-export default function useFetchProfile() {
-  const [profileDetails, setProfileDetails] = useState(null);
-  const [loadingProfileDetails, setLoadingProfileDetails] = useState(false);
-  const [errorLoadingProfileDetails, setErrorLoadingProfileDetails] =
-    useState(null);
+export default function useUpdateProfilePage(userId, setProfileDetails) {
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [errorUpdate, setErrorUpdate] = useState(null);
+  const [successUpdate, setSuccessUpdate] = useState(null);
+  const [stompClient, setStompClient] = useState(null);
 
-  const fetchProfileDetailed = useCallback(async (id) => {
-    setLoadingProfileDetails(true);
-    setErrorLoadingProfileDetails(null);
-    try {
-      const response = await axios.get(`http://localhost:8080/profile/${id}`, {
-        headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
-      });
-      setProfileDetails(response.data);
-    } catch (error) {
-      setErrorLoadingProfileDetails(error.message);
-    } finally {
-      setLoadingProfileDetails(false);
-    }
-  }, []);
+  const updateProfile = useCallback(
+    async (bio, balance) => {
+      setLoadingUpdate(true);
+      setErrorUpdate(null);
+      setSuccessUpdate(null);
+
+      try {
+        const response = await axios.put(
+          `http://localhost:8080/profile/${userId}`,
+          { bio, balance },
+          {
+            headers: {
+              Authorization: `Bearer ${TokenManager.getAccessToken()}`,
+            },
+          }
+        );
+        // Handle successful update response if needed
+        setSuccessUpdate("Profile updated successfully!");
+      } catch (error) {
+        setErrorUpdate(
+          error.response?.data?.message || "Failed to update profile"
+        );
+      } finally {
+        setLoadingUpdate(false);
+      }
+    },
+    [userId]
+  );
+
+  // WebSocket connection setup
+  useEffect(() => {
+    const client = new Client({
+      brokerURL: "ws://localhost:8080/ws",
+      connectHeaders: {
+        Authorization: `Bearer ${TokenManager.getAccessToken()}`,
+      },
+      onConnect: () => {
+        // Subscribe to the user-specific topic
+        client.subscribe(`/user/${userId}/topic/profileUpdated`, (message) => {
+          const updatedProfile = JSON.parse(message.body);
+          setProfileDetails((prev) => ({ ...prev, profile: updatedProfile }));
+          setSuccessUpdate("Profile updated successfully!");
+        });
+      },
+      onDisconnect: () => {
+        setSuccessUpdate(null);
+      },
+    });
+
+    client.activate();
+    setStompClient(client);
+
+    return () => {
+      if (client) {
+        client.deactivate();
+      }
+    };
+  }, [userId, setProfileDetails]);
 
   return {
-    profileDetails,
-    loadingProfileDetails,
-    errorLoadingProfileDetails,
-    fetchProfileDetailed,
+    loadingUpdate,
+    errorUpdate,
+    successUpdate,
+    updateProfile,
   };
 }
