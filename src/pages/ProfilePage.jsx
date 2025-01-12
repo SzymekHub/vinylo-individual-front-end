@@ -48,9 +48,7 @@ function ProfilePage() {
     );
 
   return (
-    <div className="container">
-      <div className="flex items-center justify-between mb-8"></div>
-
+    <div className="flex items-center justify-center">
       <div className="inner">
         {successUpdate && (
           <Notification type="success" message={successUpdate} />

@@ -2,17 +2,23 @@ import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
 import { Client } from "@stomp/stompjs";
+import useRefreshToken from "../useRefreshToken";
+import { useNavigate } from "react-router-dom";
 
 export default function useUpgradeProfile(userId) {
+  const navigate = useNavigate();
+  const { refreshToken } = useRefreshToken();
   const [loadingUpgrade, setLoadingUpgrade] = useState(false);
   const [errorUpgrade, setErrorUpgrade] = useState(null);
   const [successUpgrade, setSuccessUpgrade] = useState(null);
   const [stompClient, setStompClient] = useState(null);
+  const [profileUpdated, setProfileUpdated] = useState(null);
 
   const upgradeProfile = useCallback(async () => {
     setLoadingUpgrade(true);
     setErrorUpgrade(null);
     setSuccessUpgrade(null);
+    setProfileUpdated(null);
 
     try {
       const response = await axios.put(
@@ -24,8 +30,16 @@ export default function useUpgradeProfile(userId) {
           },
         }
       );
-      // Handle successful update response if needed
-      setSuccessUpgrade("Account upgraded to premium!");
+      if (response.status === 200) {
+        const isTokenRefreshed = await refreshToken();
+        if (isTokenRefreshed) {
+          setSuccessUpgrade("Account upgraded to premium successfully!");
+          // Redirect to profile page after successful upgrade.
+          setTimeout(() => {
+            navigate("/profile");
+          }, 3000);
+        }
+      }
     } catch (error) {
       setErrorUpgrade(
         error.response?.data?.message || "Failed to upgrade account"
@@ -33,10 +47,11 @@ export default function useUpgradeProfile(userId) {
     } finally {
       setLoadingUpgrade(false);
     }
-  }, [userId]);
+  }, [userId, refreshToken, navigate]);
 
   // WebSocket connection setup
   useEffect(() => {
+    if (!userId) return;
     const client = new Client({
       brokerURL: "ws://localhost:8080/ws",
       connectHeaders: {
@@ -44,12 +59,13 @@ export default function useUpgradeProfile(userId) {
       },
       onConnect: () => {
         // Subscribe to the user-specific topic
-        client.subscribe(`/user/${userId}/topic/profileUpdated`, () => {
-          setSuccessUpgrade("Profile Updated");
+        client.subscribe(`/user/${userId}/topic/profileUpdated`, (message) => {
+          // Handle the profile update message
+          setProfileUpdated(JSON.parse(message.body));
         });
       },
       onDisconnect: () => {
-        setSuccessUpgrade(null);
+        setProfileUpdated(null);
       },
     });
 
@@ -67,6 +83,7 @@ export default function useUpgradeProfile(userId) {
     loadingUpgrade,
     errorUpgrade,
     successUpgrade,
+    profileUpdated,
     upgradeProfile,
   };
 }
