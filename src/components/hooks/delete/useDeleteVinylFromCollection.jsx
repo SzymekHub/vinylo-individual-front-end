@@ -1,22 +1,16 @@
 import { useState } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
-
 const useDeleteVinylFromCollection = () => {
   const [loadingDeletingCollection, setLoadingDeletingCollection] =
     useState(false);
   const [errorDeletingCollection, setErrorDeletingCollection] = useState(null);
-  const [setCollectionVinylsItems, setUpdatedVinylsState] = useState(null);
-
-  const registerSetCollectionVinylsItems = (setterFunction) => {
-    setUpdatedVinylsState(setterFunction);
-  };
 
   const deleteVinylFromCollection = async (vinylId) => {
     const userClaims = TokenManager.getClaims();
     const userId = userClaims?.id;
     // Don't proceed if userId or vinylId is missing
-    if (!userId || !vinylId) return; // Don't proceed if userId or vinylId is missing
+    if (!userId || !vinylId) return;
 
     setLoadingDeletingCollection(true);
     setErrorDeletingCollection(null);
@@ -57,7 +51,6 @@ const useDeleteVinylFromCollection = () => {
     deleteVinylFromCollection,
     loadingDeletingCollection,
     errorDeletingCollection,
-    registerSetCollectionVinylsItems,
   };
 };
 
