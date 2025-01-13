@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useFetchVinylDetailed from "../hooks/fetch/useFetchVinylDetailed";
 import useFetchArtists from "../hooks/fetch/useFetchArtists";
 import useVinylEnums from "../hooks/fetch/useFetchEnums";
@@ -38,13 +38,16 @@ function VinylItem({ vinylItem }) {
   const { embedUrl, loading, error, fetchEmbedUrl } = useFetchSpotifyEmbedUrl();
   const { artistsItems, loading: artistsLoading } = useFetchArtists();
   const { enums } = useVinylEnums();
+  const [embedLoading, setEmbedLoading] = useState(false);
 
   const handleClickDetails = async () => {
+    setShowDetails((prevState) => !prevState);
     if (!showDetails && !vinylDetails) {
+      setEmbedLoading(true); // Set loading to true before fetching
       await fetchVinylDetailed(id);
       await fetchEmbedUrl(vinylItem.spotifyAlbumId);
+      setEmbedLoading(false);
     }
-    setShowDetails((prevState) => !prevState);
   };
 
   const handleAddToCollection = () => {
@@ -172,7 +175,7 @@ function VinylItem({ vinylItem }) {
               </p>
 
               <div className="mt-4">
-                {loading ? (
+                {embedLoading ? (
                   <p>Loading Spotify embed...</p>
                 ) : error ? (
                   <p className="text-red-400">Failed to load Spotify embed</p>
@@ -180,7 +183,7 @@ function VinylItem({ vinylItem }) {
                   embedUrl && (
                     <iframe
                       style={{ borderRadius: "12px" }}
-                      src={`https://open.spotify.com/embed/album/${vinylDetails.spotifyAlbumId}?utm_source=generator`} //if i don't want colors add this line: &theme=9
+                      src={`https://open.spotify.com/embed/album/${vinylDetails.spotifyAlbumId}?utm_source=generator`}
                       width="100%"
                       height="352"
                       frameBorder="0"
