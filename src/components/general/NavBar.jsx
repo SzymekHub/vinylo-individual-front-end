@@ -3,10 +3,12 @@ import {
   Disc3,
   DoorOpen,
   LibraryBig,
+  Library,
   UserPlus,
   ShoppingBasket,
   MessagesSquare,
   CircleUserRound,
+  ShoppingCart,
 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -41,7 +43,7 @@ export default function NavBar({
     },
     {
       name: "Collection",
-      icon: LibraryBig,
+      icon: Library,
       path: "/Collection",
     },
     {
@@ -56,7 +58,7 @@ export default function NavBar({
     },
     {
       name: "Auctions",
-      icon: ShoppingBasket,
+      icon: ShoppingCart,
       path: "/Auctions",
     },
 
