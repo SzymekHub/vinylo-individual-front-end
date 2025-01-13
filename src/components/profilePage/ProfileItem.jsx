@@ -2,7 +2,6 @@ import React from "react";
 import ProfileInfo from "./ProfileInfoItem";
 import ProfileActions from "./ProfileUpdate";
 import UpdateProfileForm from "./UpdateProfileForm";
-import userImage from "/assets/img/user.png";
 
 function ProfileItem({
   profileDetails,
@@ -23,7 +22,7 @@ function ProfileItem({
           <div className="flex flex-col items-center space-y-4">
             <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-emerald-400 shadow-lg">
               <img
-                src={userImage}
+                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                 alt="Profile Picture"
                 className="w-full h-full object-cover"
               />

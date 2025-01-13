@@ -47,25 +47,27 @@ function ChatPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="bg-gray-800 rounded-lg p-6">
-        <h2 className="text-2xl font-semibold mb-4 sm:text-3xl text-emerald-500">
-          Chat
-        </h2>
-        <UsernamePlaceholder
-          username={username}
-          onUsernameInformed={onUsernameInformed}
-        />
+    <div className="flex items-center justify-center">
+      <div className="w-full max-w-7xl">
+        <div className="bg-gradient-to-br from-gray-900 via-emerald-950 to-emerald-900 rounded-3xl p-6 shadow-2xl">
+          <h2 className="text-2xl font-semibold mb-4 sm:text-3xl text-emerald-500">
+            Chat
+          </h2>
+          <UsernamePlaceholder
+            username={username}
+            onUsernameInformed={onUsernameInformed}
+          />
 
-        <ChatMessagesPlaceholder
-          username={username}
-          messagesReceived={messages}
-        />
+          <ChatMessagesPlaceholder
+            username={username}
+            messagesReceived={messages}
+          />
 
-        <SendMessagePlaceholder
-          username={username}
-          onMessageSend={handleSendMessage}
-        />
+          <SendMessagePlaceholder
+            username={username}
+            onMessageSend={handleSendMessage}
+          />
+        </div>
       </div>
     </div>
   );

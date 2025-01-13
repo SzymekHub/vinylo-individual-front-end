@@ -15,6 +15,7 @@ const SendMessagePlaceholder = (props) => {
 
     props.onMessageSend({ text: message, to: destinationUsername });
     setMessage("");
+    setDestinationUsername("");
   };
 
   const onSubmit = (event) => {
@@ -28,14 +29,14 @@ const SendMessagePlaceholder = (props) => {
         <div className="mb-4 md:mb-0 md:w-1/2">
           <label
             htmlFor="message"
-            className="block text-sm font-medium py-3 text-emerald-400 mb-2"
+            className="block text-sm font-medium py-3 text-emerald-200 mb-2"
           >
             Message:
           </label>
           <textarea
             id="message"
             type="text"
-            className="w-full px-3 py-2 bg-emerald-700 text-emerald-100 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full px-3 py-2 bg-emerald-700 text-emerald-200 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
             onChange={(event) => setMessage(event.target.value)}
             value={message}
             placeholder="Type your message"
@@ -46,15 +47,16 @@ const SendMessagePlaceholder = (props) => {
         <div className="md:w-1/2">
           <label
             htmlFor="destUsername"
-            className="block text-sm font-medium py-3 text-emerald-400 mb-2"
+            className="block text-sm font-medium py-3 text-emerald-200 mb-2"
           >
             Direct Message:
           </label>
           <textarea
             id="destUsername"
             type="text"
-            className="w-full px-3 py-2 bg-emerald-700 text-emerald-100 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full px-3 py-2 bg-emerald-700 text-emerald-200 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
             onChange={(event) => setDestinationUsername(event.target.value)}
+            value={destinationUsername}
             placeholder="Enter recipient's username (optional)"
           />
         </div>
@@ -63,7 +65,7 @@ const SendMessagePlaceholder = (props) => {
       <div className="mt-4">
         <button
           onClick={onMessageSend}
-          className="px-4 py-2 bg-emerald-600 text-emerald-100 rounded-md hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="px-4 py-2 bg-emerald-600 text-emerald-200 rounded-md hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
         >
           Send
         </button>

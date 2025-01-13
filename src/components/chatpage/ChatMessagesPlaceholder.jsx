@@ -2,7 +2,7 @@ const MessageReceived = (props) => {
   return (
     <div
       className={`mb-2 p-2 rounded-md break-words overflow-hidden max-w-full ${
-        props.isCurrentUser ? "bg-emerald-500" : "bg-emerald-700"
+        props.isCurrentUser ? "bg-emerald-500/80" : "bg-emerald-700/80"
       }`}
     >
       {props.direct && (
@@ -11,11 +11,11 @@ const MessageReceived = (props) => {
         </span>
       )}
       {props.isCurrentUser ? (
-        <span className="font-semibold text-emerald-100">(You): </span>
+        <span className="font-semibold text-emerald-200">(You): </span>
       ) : (
         <span className="font-semibold text-emerald-300">{props.from}: </span>
       )}
-      <span className="text-emerald-100">{props.text}</span>
+      <span className="text-emerald-200">{props.text}</span>
     </div>
   );
 };
@@ -23,7 +23,7 @@ const MessageReceived = (props) => {
 const ChatMessagesPlaceholder = (props) => {
   return (
     <div>
-      <h3 className="text-lg font-semibold text-emerald-400 mb-4">Messages:</h3>
+      <h3 className="text-lg font-semibold text-emerald-200 mb-4">Messages:</h3>
       <div className="space-y-2">
         {props.messagesReceived.map((message) => {
           const isCurrentUser = message.from === props.username;
