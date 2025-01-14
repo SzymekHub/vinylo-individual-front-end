@@ -17,7 +17,7 @@ export default function useFetchAuctionDetailed() {
       });
       setAuctionDetails(response.data); // Set the fetched auction details
     } catch (error) {
-      setErrorLoadingAuctionDetails(error.message); // Set only the error message
+      setErrorLoadingAuctionDetails(error.response.data); // Set only the error message
     } finally {
       setLoadingAuctionDetails(false);
     }

@@ -23,7 +23,7 @@ export default function useFetchVinylsCollectionDetails() {
       );
       setVinylCollectionDetails(response.data);
     } catch (error) {
-      setErrorLoadingVinylCollectionDetails(error.message);
+      setErrorLoadingVinylCollectionDetails(error.response.data);
     } finally {
       setLoadingVinylCollectionDetails(false);
     }

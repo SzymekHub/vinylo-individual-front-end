@@ -27,7 +27,7 @@ const useFetchCollectionVinyls = (userId) => {
 
         setCollectionVinylsItems(response.data.vinyls);
       } catch (error) {
-        setError(error);
+        setError(error.response.data);
       } finally {
         setLoading(false);
       }

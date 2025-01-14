@@ -17,7 +17,7 @@ export default function useFetchProfile() {
       });
       setProfileDetails(response.data);
     } catch (error) {
-      setErrorLoadingProfileDetails(error.message);
+      setErrorLoadingProfileDetails(error.response.data);
     } finally {
       setLoadingProfileDetails(false);
     }

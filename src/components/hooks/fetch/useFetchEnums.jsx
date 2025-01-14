@@ -16,7 +16,7 @@ const useVinylEnums = () => {
         });
         setEnums(response.data);
       } catch (err) {
-        setError(err.message);
+        setError(err.response.data);
       } finally {
         setLoading(false);
       }

@@ -17,7 +17,7 @@ export default function useFetchVinylDetailed() {
       });
       setVinylDetails(response.data); // Set the fetched vinyl details
     } catch (error) {
-      setErrorLoadingVinylDetails(error.message); // Set only the error message
+      setErrorLoadingVinylDetails(error.response.data); // Set only the error message
     } finally {
       setLoadingVinylDetails(false);
     }
