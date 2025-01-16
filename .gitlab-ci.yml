@@ -58,8 +58,8 @@ docker-build:
   stage: docker
   dependencies:
     - build-app
+  before_script:
+    - echo "$DOCKER_PAT" | docker login -u "$DOCKER_USERNAME" --password-stdin
   script:
-    - echo "$DOCKER_PAT" | docker login -u szymek8docker --password-stdin
-    - docker build -t szymek8docker/vinylo-backend:frontend .
-    - docker push szymek8docker/vinylo-backend:frontend
-
+    - docker build -t szymek8docker/vinylo-frontend:latest .
+    - docker push szymek8docker/vinylo-frontend:latest
