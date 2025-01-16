@@ -29,10 +29,8 @@ services:
       dockerfile: Dockerfile
     container_name: vinylo-frontend
     environment:
-      VITE_BACKEND_URL: http://localhost:8090
-      VITE_BACKEND_WS_URL: ws://localhost:8090
+      VITE_BACKEND_URL: http://vinylo-backend:8090
+      VITE_BACKEND_WS_URL: ws://vinylo-backend:8090
     ports:
       - "3000:3000"
-    depends_on:
-      - vinylo-db
     restart: always
