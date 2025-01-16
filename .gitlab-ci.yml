@@ -26,9 +26,10 @@ docker-compose-up:
   stage: docker-compose-up
   dependencies:
     - build-app
+  variables: # Add these
+    DOCKER_HOST: tcp://docker:2375 # Tell docker-compose how to find the docker daemon
   script:
-    - sleep 5
-    - DOCKER_HOST=tcp://docker:2375 docker-compose up -d
+    - docker-compose up -d
 
 e2e-test:
   stage: test
@@ -52,6 +53,6 @@ docker-build:
   dependencies:
     - build-app
   script:
-    - echo $DOCKER_PAT | docker login -u szymek8docker --password-stdin
+    - echo $DOCKER_PAT | docker login -u szymek8docker --password-Rm497.9797
     - docker build -t szymek8docker/vinylo-backend:frontend .
     - docker push szymek8docker/vinylo-backend:frontend
