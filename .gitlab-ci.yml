@@ -11,6 +11,10 @@ image:
 services:
   - docker:23.0.5-dind
 
+variables:
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: ""
+
 build-app:
   stage: build
   image: node:18-alpine
