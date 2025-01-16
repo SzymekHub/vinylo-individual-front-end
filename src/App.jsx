@@ -15,10 +15,11 @@ import TokenManager from "./components/hooks/TokenManager";
 import ChatPage from "./pages/ChatPage";
 import ProfilePage from "./pages/ProfilePage";
 import UpgradePage from "./pages/UpgradePage";
+import BidPage from "./pages/BidPage";
 
 function App() {
   const [claims, setClaims] = useState(TokenManager.getClaims());
-  const [localClaims, setLocalClaims] = useState(null); // Assuming you need this for local storage.
+  const [localClaims, setLocalClaims] = useState(null); //  need this for local storage.
   const [userDetails, setUserDetails] = useState(null);
   return (
     <Router>
@@ -52,6 +53,15 @@ function App() {
             element={
               <PrivateRoute
                 element={<AllAuctionsPage />}
+                allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
+              />
+            }
+          />
+          <Route
+            path="/bid/:auctionId"
+            element={
+              <PrivateRoute
+                element={<BidPage />}
                 allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
               />
             }

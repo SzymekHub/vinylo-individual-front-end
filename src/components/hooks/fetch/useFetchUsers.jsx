@@ -1,13 +1,21 @@
+import { useCallback } from "react";
 import axios from "axios";
-import tokenManager from "../TokenManager";
+import TokenManager from "../TokenManager";
 
-const useFetchUsers = {
-  getUser: (id) =>
-    axios
-      .get(`http://localhost:8080/users/${id}`, {
-        headers: { Authorization: `Bearer ${tokenManager.getAccessToken()}` },
-      })
-      .then((response) => response.data),
+const useFetchUsers = () => {
+  const getUser = useCallback(async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/users/${id}`, {
+        headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
+      });
+      return response.data;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }, []);
+
+  return { getUser };
 };
 
 export default useFetchUsers;

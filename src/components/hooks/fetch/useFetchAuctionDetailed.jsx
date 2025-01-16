@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
 
@@ -8,23 +8,24 @@ export default function useFetchAuctionDetailed() {
   const [errorLoadingAuctionDetails, setErrorLoadingAuctionDetails] =
     useState(null);
 
-  const fetchAuctionDetailed = async (id) => {
+  const fetchAuctionDetailed = useCallback(async (id) => {
     setLoadingAuctionDetails(true);
-    setErrorLoadingAuctionDetails(null); // Reset error state before fetching
+    setErrorLoadingAuctionDetails(null);
     try {
       const response = await axios.get(`http://localhost:8080/auctions/${id}`, {
         headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
       });
-      setAuctionDetails(response.data); // Set the fetched auction details
+      setAuctionDetails(response.data);
     } catch (error) {
-      setErrorLoadingAuctionDetails(error.response.data); // Set only the error message
+      setErrorLoadingAuctionDetails(error.response.data);
     } finally {
       setLoadingAuctionDetails(false);
     }
-  };
+  }, []);
 
   return {
     auctionDetails,
+    setAuctionDetails,
     loadingAuctionDetails,
     errorLoadingAuctionDetails,
     fetchAuctionDetailed,

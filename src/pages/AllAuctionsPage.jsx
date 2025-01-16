@@ -42,12 +42,12 @@ function AllAuctionsPage() {
       </div>
 
       {/* Render Vinyl Details if a auction is selected */}
-      {selectedAuctionId && auctionDetails && (
+      {selectedAuctionId && (
         <div className="mt-8">
           <AuctionItem
-            auctionItem={auctionDetails}
-            loadingAuctionDetails={loadingAuctionDetails}
-            fetchAuctionDetailedError={fetchAuctionDetailedError}
+            auctionItem={auctionsItems.find(
+              (auction) => auction.id === selectedAuctionId
+            )}
           />
         </div>
       )}

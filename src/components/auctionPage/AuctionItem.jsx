@@ -1,26 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useFetchAuctionDetailed from "../hooks/fetch/useFetchAuctionDetailed";
 import useFetchVinyls from "../hooks/fetch/useFetchVinyls";
 import useFetchVinylDetailed from "../hooks/fetch/useFetchVinylDetailed";
 import useFetchSpotifyEmbedUrl from "../spotify/useFetchSpotifyEmbedUrl";
-import useFetchUsers from "../hooks/fetch/useFetchUsers";
 import useFetchArtists from "../hooks/fetch/useFetchArtists";
 import useVinylEnums from "../hooks/fetch/useFetchEnums";
+import useUpdateAuction from "../hooks/update/useUpdateAuction";
+import UpdateAuctionForm from "../hooks/update/UpdateAuctionForm";
+import TokenManager from "../hooks/TokenManager";
+import useFetchAuctions from "../hooks/fetch/useFetchAuction";
+import usePlaceBid from "../hooks/update/usePlaceBid";
+import AuctionItemHeader from "./AuctionItemHeader";
+import AuctionDetailsSection from "./AuctionDetailsSection";
+import VinylDetailsSection from "../general/VinylDetailsSection";
 
 function AuctionItem({ auctionItem }) {
   // Added a state to toggle visibility of details
   const [showDetails, setShowDetails] = useState(false);
   // State to toggle vinyl details visibility
   const [showVinylDetails, setShowVinylDetails] = useState(false);
-  const [sellerUsername, setSellerUsername] = useState(null);
+  const userClaims = TokenManager.getClaims();
+  const userId = userClaims?.id;
+  const setAuctionDetailsRef = useRef(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
-  // Fetch auction details using custom hook
   const {
     auctionDetails,
     loadingAuctionDetails,
     errorLoadingAuctionDetails,
     fetchAuctionDetailed,
+    setAuctionDetails,
   } = useFetchAuctionDetailed();
+  useEffect(() => {
+    setAuctionDetailsRef.current = setAuctionDetails;
+  }, [setAuctionDetails]);
 
   const { vinylsItems } = useFetchVinyls();
   const {
@@ -33,6 +46,25 @@ function AuctionItem({ auctionItem }) {
   const [embedLoading, setEmbedLoading] = useState(false);
   const { artistsItems, loading: artistsLoading } = useFetchArtists();
   const { enums } = useVinylEnums();
+
+  // Now does not require a second parameter as setAuctionDetails is being handled via ref
+  const {
+    loadingUpdate,
+    errorUpdate,
+    successUpdate,
+    updateAuction,
+    setFetchAuctionDetailed,
+  } = useUpdateAuction(auctionItem.id, setAuctionDetails);
+  useEffect(() => {
+    setFetchAuctionDetailed(fetchAuctionDetailed);
+  }, [fetchAuctionDetailed, setFetchAuctionDetailed]);
+
+  //place bid state
+  const { loadingBid, errorBid, successBid, placeBid } = usePlaceBid(
+    auctionItem.id
+  );
+
+  const { handlePageChange } = useFetchAuctions();
 
   const handleViewDetails = async () => {
     if (!showDetails && !auctionDetails) {
@@ -73,35 +105,13 @@ function AuctionItem({ auctionItem }) {
     }
   };
 
-  // Fetch seller's username whenever auctionDetails are loaded
-  useEffect(() => {
-    const fetchSellerUsername = async () => {
-      if (auctionDetails?.seller_id) {
-        try {
-          const seller = await useFetchUsers.getUser(auctionDetails.seller_id);
-          setSellerUsername(seller.username);
-        } catch (error) {}
-      }
-    };
-
-    fetchSellerUsername();
-  }, [auctionDetails]);
-
-  const formatDateWithoutSeconds = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString("en-US", {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    });
+  const handlePlaceBid = async (bidAmount) => {
+    try {
+      await placeBid(bidAmount, userId);
+      // Refetch Auctions after placing a bid
+      handlePageChange(0);
+    } catch (e) {}
   };
-
-  //find the vinyl and user name by matching vinyl_id and user_id with fetched vinyls and users.
-  const vinylName = vinylsItems.find(
-    (vinyl) => vinyl.id === auctionDetails?.vinyl_id
-  )?.title;
 
   // Find the artist name by matching artist_id with fetched artists
   const artistName = artistsItems.find(
@@ -122,7 +132,7 @@ function AuctionItem({ auctionItem }) {
         <div className="hidden lg:block lg:w-1/3 relative">
           <img
             alt="Background"
-            src="https://images.unsplash.com/photo-1453128650469-95f7ddbe78cf?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="https://images.unsplash.com/photo-1453128650469-95f7ddbe78cf?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaH0dG8tdGFwYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/80 to-transparent"></div>
@@ -130,48 +140,14 @@ function AuctionItem({ auctionItem }) {
 
         {/* Right Content Section */}
         <div className="w-full lg:w-2/3 p-6 flex flex-col gap-6">
-          <div
-            className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 ${
-              showVinylDetails ? "mb-4" : ""
-            }`}
-          >
-            <div className="w-4/5">
-              <h3 className="font-bold text-2xl text-white mb-4">
-                {auctionItem.title}
-              </h3>
-              <p className="text-sm text-emerald-200 leading-relaxed">
-                <strong>Current Price : </strong> $
-                {auctionItem.currentPrice.toFixed(2)}
-              </p>
-              <p className="text-sm text-emerald-200 leading-relaxed">
-                <strong>Ending : </strong>{" "}
-                {formatDateWithoutSeconds(auctionItem.endTime) +
-                  " (MM/DD/YYYY/HH:MM)" || "No end time available."}
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <button
-                onClick={handleViewDetails}
-                className="flex items-center px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-white rounded-full hover:text-emerald-900 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-opacity-50"
-                disabled={false}
-              >
-                {showDetails ? "Hide Details" : "View Details"}
-              </button>
-              {showDetails && (
-                <button
-                  className="flex items-center px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white hover:text-emerald-900 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-opacity-50"
-                  onClick={handleViewVinylDetails}
-                  disabled={loadingVinylDetails}
-                >
-                  {loadingVinylDetails
-                    ? "Loading..."
-                    : showVinylDetails
-                    ? "Hide Vinyl Details"
-                    : "View Vinyl Details"}
-                </button>
-              )}
-            </div>
-          </div>
+          <AuctionItemHeader
+            auctionItem={auctionDetails || auctionItem}
+            showDetails={showDetails}
+            showVinylDetails={showVinylDetails}
+            handleViewDetails={handleViewDetails}
+            handleViewVinylDetails={handleViewVinylDetails}
+            loadingVinylDetails={loadingVinylDetails}
+          />
 
           {errorLoadingAuctionDetails && (
             <p className="mt-4 text-lg text-red-500 font-bold">
@@ -189,126 +165,52 @@ function AuctionItem({ auctionItem }) {
                 showVinylDetails ? "w-full sm:w-1/2 sm:pr-6" : "w-full"
               } transition-all duration-300 ease-in-out`}
             >
-              {showDetails && auctionDetails && (
-                <div className="mt-2">
-                  <h4 className="font-bold text-2xl text-white mb-4">
-                    {" "}
-                    Auction Details:{" "}
-                  </h4>
-                  <p className="text-sm text-emerald-200 leading-relaxed break-words">
-                    <strong>Seller : </strong>
-                    {sellerUsername || "No seller information available."}
-                  </p>
-                  <p className="text-sm text-emerald-200 leading-relaxed break-words">
-                    <strong>Vinyl : </strong>
-                    {vinylName || " No vinyl information available."}
-                  </p>
-                  <div className="flex items-center space-x-4 text-emerald-300">
-                    <p className="text-sm text-emerald-200 leading-relaxed break-words">
-                      <strong>Starting Price :</strong> $
-                      {auctionDetails.startingPrice.toFixed(2) ||
-                        "No starting price available."}
-                    </p>
-                    <p className="text-sm text-emerald-200 leading-relaxed">
-                      <strong>Current Price : </strong> $
-                      {auctionItem.currentPrice.toFixed(2)}
-                    </p>
-                  </div>
-                  <p className="text-sm text-emerald-200 leading-relaxed break-words">
-                    <strong>Start Time :</strong>{" "}
-                    {formatDateWithoutSeconds(auctionDetails.startTime) +
-                      " (MM/DD/YYYY/HH:MM)" || "No start time available."}
-                  </p>
-                  <p className="text-sm text-emerald-200 leading-relaxed">
-                    <strong>Ending : </strong>{" "}
-                    {formatDateWithoutSeconds(auctionItem.endTime) +
-                      " (MM/DD/YYYY/HH:MM)" || "No end time available."}
-                  </p>
-                  <p className="text-sm text-emerald-200 leading-relaxed break-words">
-                    <strong>Description :</strong>{" "}
-                    {auctionDetails.description || " No description available."}
-                  </p>
-                </div>
+              {!isEditMode ? (
+                <AuctionDetailsSection
+                  showDetails={showDetails}
+                  auctionDetails={auctionDetails}
+                  userId={userId}
+                  loadingBid={loadingBid}
+                  auctionItem={auctionDetails || auctionItem}
+                  toggleEditMode={() => setIsEditMode((prev) => !prev)}
+                />
+              ) : (
+                <UpdateAuctionForm
+                  auction={auctionDetails}
+                  updateAuction={updateAuction}
+                  toggleEditMode={() => setIsEditMode((prev) => !prev)}
+                />
               )}
             </div>
 
-            {showVinylDetails && vinylDetails && (
-              <div
-                className={`mt-4 bg-emerald-700/50 backdrop-blur-sm rounded-lg p-6 ${
-                  showVinylDetails
-                    ? "w-full sm:w-1/2 sm:border-l sm:border-emerald-600/30"
-                    : "w-full"
-                } transition-all duration-300 ease-in-out`}
-              >
-                <h4 className="font-bold text-2xl text-white mb-4">
-                  Vinyl Details:
-                </h4>
-                <div className="flex items-center space-x-4 text-emerald-300">
-                  <p className="text-sm text-emerald-200 leading-relaxed break-words">
-                    <strong>Vinyl : </strong>
-                    {vinylName || " No vinyl information available."}
-                  </p>
-                  <p className="text-sm text-emerald-200 leading-relaxed">
-                    <strong>Artist: </strong>
-                    {artistName || "No artist information available."}
-                  </p>
-                </div>
-                <p className="text-sm text-emerald-200 leading-relaxed">
-                  <strong>Released: </strong>
-                  {vinylDetails.isReleased ? "Yes" : "No"}
-                </p>
-                <div className="flex items-center space-x-4 text-emerald-300">
-                  <p className="text-sm text-emerald-200 leading-relaxed break-words">
-                    <strong>color : </strong>{" "}
-                    {getEnumDisplay("colors", vinylDetails.color) ||
-                      " No color info available."}
-                  </p>
-                  <p className="text-sm text-emerald-200 leading-relaxed">
-                    <strong>State: </strong>
-                    {getEnumDisplay("states", vinylDetails.state) || "N/A"}
-                  </p>
-                </div>
-                <div className="flex items-center space-x-4 text-emerald-300">
-                  <p className="text-sm text-emerald-200 leading-relaxed">
-                    <strong>Type: </strong>
-                    {getEnumDisplay("vinylTypes", vinylDetails.vinylType) ||
-                      "N/A"}
-                  </p>
-
-                  <p className="text-sm text-emerald-200 leading-relaxed break-words">
-                    <strong>Speed : </strong>{" "}
-                    {getEnumDisplay("speeds", vinylDetails.speed) ||
-                      " No Speed info available."}
-                  </p>
-                </div>
-                <p className="text-sm text-emerald-200 leading-relaxed">
-                  <strong>Description: </strong>
-                  {vinylDetails.description || "No description available."}
-                </p>
-                <div className="mt-4">
-                  {loading ? (
-                    <p>Loading Spotify embed...</p>
-                  ) : error ? (
-                    <p className="text-red-400">Failed to load Spotify embed</p>
-                  ) : (
-                    embedUrl && (
-                      <iframe
-                        style={{ borderRadius: "12px" }}
-                        src={`https://open.spotify.com/embed/album/${vinylDetails.spotifyAlbumId}?utm_source=generator`}
-                        width="100%"
-                        height="352"
-                        frameBorder="0"
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                        loading="lazy"
-                      ></iframe>
-                    )
-                  )}
-                </div>
-              </div>
-            )}
+            <VinylDetailsSection
+              showVinylDetails={showVinylDetails}
+              vinylDetails={vinylDetails}
+              vinylName={
+                vinylsItems.find(
+                  (vinyl) => vinyl.id === auctionDetails?.vinyl_id
+                )?.title
+              }
+              artistName={artistName}
+              getEnumDisplay={getEnumDisplay}
+              embedUrl={embedUrl}
+              loading={loading}
+              error={error}
+            />
           </div>
         </div>
       </div>
+      {/* Error and Success Messages */}
+      {errorUpdate && (
+        <p className="mt-4 text-sm text-red-500">{errorUpdate}</p>
+      )}
+      {successUpdate && (
+        <p className="mt-4 text-sm text-emerald-500">{successUpdate}</p>
+      )}
+      {errorBid && <p className="mt-4 text-sm text-red-500">{errorBid}</p>}
+      {successBid && (
+        <p className="mt-4 text-sm text-emerald-500">{successBid}</p>
+      )}
     </li>
   );
 }
