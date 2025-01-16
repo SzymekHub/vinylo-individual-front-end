@@ -9,7 +9,12 @@ image:
   name: docker:23.0.5
 
 services:
-  - docker:23.0.5-dind
+  - name: docker:23.0.5-dind
+    command: ["--tls=false"]
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
 
 build-app:
   stage: build
@@ -26,6 +31,9 @@ docker-compose-up:
   stage: docker-compose-up
   dependencies:
     - build-app
+  before_script:
+    - apk add --no-cache curl docker-compose
+    - until curl -s http://docker:2375/_ping; do echo "Waiting for Docker..."; sleep 1; done
   script:
     - docker-compose up -d
 
@@ -51,6 +59,6 @@ docker-build:
   dependencies:
     - build-app
   script:
-    - echo $DOCKER_PAT | docker login -u szymek8docker --password-Rm497.9797
+    - echo $DOCKER_PAT | docker login -u szymek8docker --password-stdin
     - docker build -t szymek8docker/vinylo-backend:frontend .
-    - docker push szymek8docker/vinylo-backend:frontend 
+    - docker push szymek8docker/vinylo-backend:frontend
