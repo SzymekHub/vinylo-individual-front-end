@@ -27,6 +27,7 @@ docker-compose-up:
   dependencies:
     - build-app
   script:
+    - sleep 5
     - DOCKER_HOST=tcp://docker:2375 docker-compose up -d
 
 e2e-test:
