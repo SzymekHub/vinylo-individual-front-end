@@ -1,0 +1,56 @@
+stages:
+  - build
+  - docker-compose-up
+  - test
+  - docker-compose-down
+  - docker
+
+image:
+  name: docker:23.0.5
+
+services:
+  - docker:23.0.5-dind
+
+build-app:
+  stage: build
+  image: node:18-alpine
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+
+docker-compose-up:
+  stage: docker-compose-up
+  dependencies:
+    - build-app
+  script:
+    - docker-compose up -d
+
+e2e-test:
+  stage: test
+  image: cypress/browsers:node-22.11.0-chrome-130.0.6723.69-1-ff-132.0-edge-130.0.2849.56-1
+  dependencies:
+    - docker-compose-up
+  script:
+    - npm ci
+    - npx cypress run --browser chrome --headless
+  allow_failure: true
+
+docker-compose-down:
+  stage: docker-compose-down
+  dependencies:
+    - docker-compose-up
+  script:
+    - docker-compose down
+
+docker-build:
+  stage: docker
+  dependencies:
+    - build-app
+  script:
+    - echo $DOCKER_PAT | docker login -u szymek8docker --password-Rm497.9797
+    - docker build -t szymek8docker/vinylo-backend:frontend .
+    - docker push szymek8docker/vinylo-backend:frontend 
