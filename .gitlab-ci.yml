@@ -11,9 +11,6 @@ image:
 services:
   - docker:23.0.5-dind
 
-variables:
-  DOCKER_HOST: tcp://docker:2375 # Add this line
-
 build-app:
   stage: build
   image: node:18-alpine
@@ -30,7 +27,7 @@ docker-compose-up:
   dependencies:
     - build-app
   script:
-    - docker-compose up -d
+    - DOCKER_HOST=tcp://docker:2375 docker-compose up -d
 
 e2e-test:
   stage: test
