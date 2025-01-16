@@ -35,6 +35,7 @@ function LoginForm(props) {
                     required
                     className="appearance-none relative block w-full px-3 py-2 border border-emerald-600/30 placeholder-emerald-300/75 text-emerald-100 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent sm:text-sm bg-emerald-900/30 backdrop-blur-sm transition-all duration-300"
                     placeholder="Username"
+                    data-cy="input-username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                   />
@@ -53,6 +54,7 @@ function LoginForm(props) {
                     required
                     className="appearance-none relative block w-full px-3 py-2 border border-emerald-600/30 placeholder-emerald-300/75 text-emerald-100 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent sm:text-sm bg-emerald-900/30 backdrop-blur-sm transition-all duration-300"
                     placeholder="Password"
+                    data-cy="input-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -63,6 +65,7 @@ function LoginForm(props) {
                 <button
                   type="submit"
                   className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-emerald-900 bg-emerald-400 hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-300 shadow-lg hover:shadow-emerald-400/50"
+                  data-cy="login-button"
                 >
                   Log in
                 </button>
