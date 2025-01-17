@@ -30,6 +30,7 @@ const ArtistAutocomplete = ({ artistId, setArtistId }) => {
           {...params}
           className="w-full rounded-lg bg-emerald-800 border-emerald-700 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
           placeholder="Select artist"
+          data-cy="artist-name"
         />
       )}
       sx={{ width: "100%" }}

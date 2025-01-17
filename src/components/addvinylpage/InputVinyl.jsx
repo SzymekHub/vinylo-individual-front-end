@@ -64,6 +64,7 @@ function InputVinyl() {
             required
             id="vinylType"
             name="vinylType"
+            data-cy="vinyl-type"
             className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
           >
             <option value="">Select Vinyl Type</option>
@@ -89,6 +90,7 @@ function InputVinyl() {
               name="title"
               className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
               placeholder="Enter vinyl title"
+              data-cy="title"
               required
             />
           </div>
@@ -102,6 +104,7 @@ function InputVinyl() {
             id="speed"
             name="speed"
             className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
+            data-cy="speed"
             required
           >
             <option value="">Select Speed</option>
@@ -121,6 +124,7 @@ function InputVinyl() {
             id="state"
             name="state"
             className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
+            data-cy="state"
             required
           >
             <option value="">Select State</option>
@@ -140,6 +144,7 @@ function InputVinyl() {
             id="color"
             name="color"
             className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-300"
+            data-cy="color"
             required
           >
             <option value="">Select Color</option>
@@ -158,6 +163,7 @@ function InputVinyl() {
               checked={isReleased}
               onChange={handleCheckboxChange}
               className="rounded border-emerald-700 bg-emerald-800 text-emerald-500 shadow-sm focus:ring-emerald-500"
+              data-cy="is-released"
               required
             />
             <span className="ml-2 text-emerald-100">Is Released</span>
@@ -181,6 +187,7 @@ function InputVinyl() {
               maxLength={150}
               value={description} // Bind value to state
               onChange={(e) => setDescription(e.target.value)} // Update state on change
+              data-cy="description"
               required
             />
             <div className="text-emerald-400 text-sm text-right">
@@ -205,7 +212,7 @@ function InputVinyl() {
               maxLength={666}
               value={spotifyAlbumId}
               onChange={(e) => setSpotifyAlbumId(e.target.value)} // Update state on change
-              required
+              data-cy="spotify-album-id"
             />
             <div className="text-emerald-400 text-sm text-right">
               {spotifyAlbumId.length}/666
@@ -217,6 +224,7 @@ function InputVinyl() {
         <div className="flex items-center justify-between ">
           <button
             type="submit"
+            data-cy="submit-vinyl"
             className="inline-block rounded-lg bg-emerald-600 px-5 py-3 text-sm font-medium text-white hover:bg-emerald-700 transition-colors"
             disabled={loading}
           >

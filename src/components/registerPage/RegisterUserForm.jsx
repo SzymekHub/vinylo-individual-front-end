@@ -59,6 +59,7 @@ const RegisterUserForm = ({ onRegisterSuccess }) => {
                     type="text"
                     id="username"
                     name="username"
+                    data-cy="input-username"
                     placeholder="Enter username"
                     className="mt-1 w-full px-3 py-2 border border-emerald-600/30 rounded-md bg-emerald-900/30 text-emerald-100 placeholder-emerald-300/75 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
                     required
@@ -77,6 +78,7 @@ const RegisterUserForm = ({ onRegisterSuccess }) => {
                     type="email"
                     id="email"
                     name="email"
+                    data-cy="input-email"
                     placeholder="Enter email"
                     className="mt-1 w-full px-3 py-2 border border-emerald-600/30 rounded-md bg-emerald-900/30 text-emerald-100 placeholder-emerald-300/75 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
                     required
@@ -95,6 +97,7 @@ const RegisterUserForm = ({ onRegisterSuccess }) => {
                     type="password"
                     id="password"
                     name="password"
+                    data-cy="input-password"
                     placeholder="Enter password"
                     className="mt-1 w-full px-3 py-2 border border-emerald-600/30 rounded-md bg-emerald-900/30 text-emerald-100 placeholder-emerald-300/75 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
                     required
@@ -105,6 +108,7 @@ const RegisterUserForm = ({ onRegisterSuccess }) => {
                 <div className="mt-6">
                   <button
                     type="submit"
+                    data-cy="register-button"
                     className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-emerald-900 bg-emerald-400 hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-300 shadow-lg hover:shadow-emerald-400/50 disabled:opacity-50"
                     disabled={loading}
                   >

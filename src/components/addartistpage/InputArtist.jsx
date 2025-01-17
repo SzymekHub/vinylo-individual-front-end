@@ -45,6 +45,7 @@ function InputArtist() {
             <input
               type="text"
               name="name"
+              data-cy="artist-name"
               className="w-full rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
               placeholder="Enter Artists Name"
               required
@@ -64,6 +65,7 @@ function InputArtist() {
               className="w-full px-3 py-2 rounded-lg bg-emerald-800 border-emerald-700 p-4 pe-12 text-sm shadow-sm text-emerald-50 placeholder-emerald-300"
               placeholder="Enter Artists bio"
               rows="3"
+              data-cy="bio"
               maxLength={150}
               value={bio} // Bind value to state
               onChange={(e) => setBio(e.target.value)} // Update state on change
@@ -79,6 +81,7 @@ function InputArtist() {
         <div className="flex items-center justify-between ">
           <button
             type="submit"
+            data-cy="submit-artist"
             className="inline-block rounded-lg bg-emerald-600 px-5 py-3 text-sm font-medium text-white hover:bg-emerald-700 transition-colors"
             disabled={loading}
           >

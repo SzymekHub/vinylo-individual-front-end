@@ -25,6 +25,7 @@ function UpdateProfileForm({ profile, updateProfile, toggleEditMode }) {
           type="text"
           id="bio"
           value={bio}
+          data-cy="bio"
           onChange={handleBioChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-400 focus:ring-emerald-400 bg-gray-800 text-white"
         />
@@ -39,6 +40,7 @@ function UpdateProfileForm({ profile, updateProfile, toggleEditMode }) {
         <input
           type="number"
           id="balance"
+          data-cy="balance"
           value={balance}
           onChange={handleBalanceChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-400 focus:ring-emerald-400 bg-gray-800 text-white"
@@ -46,6 +48,7 @@ function UpdateProfileForm({ profile, updateProfile, toggleEditMode }) {
       </div>
       <button
         type="submit"
+        data-cy="submit-profile"
         className="inline-flex items-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
       >
         Update Profile
