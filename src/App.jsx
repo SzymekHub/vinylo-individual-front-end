@@ -17,6 +17,7 @@ import ProfilePage from "./pages/ProfilePage";
 import UpgradePage from "./pages/UpgradePage";
 import BidPage from "./pages/BidPage";
 import ArtistsPage from "./pages/ArtistPage";
+import AllArtistspage from "./pages/AllArtistsPage";
 
 function App() {
   const [claims, setClaims] = useState(TokenManager.getClaims());
@@ -99,6 +100,15 @@ function App() {
             element={
               <PrivateRoute
                 element={<AllVinylsPage />}
+                allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
+              />
+            }
+          />
+          <Route
+            path="/AllArtists"
+            element={
+              <PrivateRoute
+                element={<AllArtistspage />}
                 allowedRoles={["REGULAR", "ADMIN", "PREMIUM"]}
               />
             }

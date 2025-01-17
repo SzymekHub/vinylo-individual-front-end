@@ -102,6 +102,11 @@ export default function NavBar({
       path: "/AllVinyls",
     },
     {
+      name: "All Artists",
+      icon: LibraryBig,
+      path: "/AllArtists",
+    },
+    {
       name: "Chat",
       icon: MessagesSquare,
       path: "/Chat",
@@ -140,6 +145,11 @@ export default function NavBar({
       name: "All Vinyls",
       icon: LibraryBig,
       path: "/AllVinyls",
+    },
+    {
+      name: "All Artists",
+      icon: LibraryBig,
+      path: "/AllArtists",
     },
     {
       name: "Sell Vinyls",
