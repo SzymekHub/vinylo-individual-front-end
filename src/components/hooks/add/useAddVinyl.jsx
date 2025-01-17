@@ -2,12 +2,14 @@ import { useState } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
 import useVinylEnums from "../fetch/useFetchEnums";
+import { applicationConfig } from "../../../../application.config";
 
 const useAddVinyl = (vinylsItems, setVinylsItems) => {
   const { enums, loading: enumsLoading, error: enumsError } = useVinylEnums();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [addedVinylMessage, setAddedVinylMessage] = useState(""); // State for success message
+  const backendUrl = applicationConfig["backend-server-url"];
 
   const addVinyl = async (
     vinylType,
@@ -57,13 +59,9 @@ const useAddVinyl = (vinylsItems, setVinylsItems) => {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/vinyls",
-        newVinyl,
-        {
-          headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
-        }
-      );
+      const response = await axios.post(`${backendUrl}/vinyls`, newVinyl, {
+        headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
+      });
 
       if (response && response.data) {
         // Add the new item with the DB-assigned ID to the state

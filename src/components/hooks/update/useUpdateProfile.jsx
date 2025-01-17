@@ -2,12 +2,15 @@ import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
 import { Client } from "@stomp/stompjs";
+import { applicationConfig } from "../../../../application.config";
 
 export default function useUpdateProfilePage(userId, setProfileDetails) {
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [errorUpdate, setErrorUpdate] = useState(null);
   const [successUpdate, setSuccessUpdate] = useState(null);
   const [stompClient, setStompClient] = useState(null);
+  const backendUrl = applicationConfig["backend-server-url"];
+  const webSocketUrl = applicationConfig["backend-server-url-ws"];
 
   const updateProfile = useCallback(
     async (bio, balance) => {
@@ -17,7 +20,7 @@ export default function useUpdateProfilePage(userId, setProfileDetails) {
 
       try {
         const response = await axios.put(
-          `http://localhost:8080/profile/${userId}`,
+          `${backendUrl}/profile/${userId}`,
           { bio, balance },
           {
             headers: {
@@ -41,7 +44,7 @@ export default function useUpdateProfilePage(userId, setProfileDetails) {
   // WebSocket connection setup
   useEffect(() => {
     const client = new Client({
-      brokerURL: "ws://localhost:8080/ws",
+      brokerURL: `${webSocketUrl}/ws`,
       connectHeaders: {
         Authorization: `Bearer ${TokenManager.getAccessToken()}`,
       },

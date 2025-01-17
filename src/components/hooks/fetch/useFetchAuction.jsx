@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
+import { applicationConfig } from "../../../../application.config";
 
 const useFetchAuctions = () => {
   const [auctionsItems, setAuctionsItems] = useState([]);
@@ -10,13 +11,14 @@ const useFetchAuctions = () => {
   // Initialize to 1 to avoid errors
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 5;
+  const backendUrl = applicationConfig["backend-server-url"];
 
   useEffect(() => {
     const fetchAuctions = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:8080/auctions?page=${currentPage}&size=${pageSize}`,
+          `${backendUrl}/auctions?page=${currentPage}&size=${pageSize}`,
           {
             headers: {
               Authorization: `Bearer ${TokenManager.getAccessToken()}`,

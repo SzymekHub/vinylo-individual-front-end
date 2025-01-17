@@ -5,11 +5,15 @@ import SendMessagePlaceholder from "../components/chatpage/SendMessagePlaceholde
 import UsernamePlaceholder from "../components/chatpage/UsernamePlaceholder";
 import { v4 as uuidv4 } from "uuid";
 import TokenManager from "../components/hooks/TokenManager";
+import { applicationConfig } from "../../application.config";
 
 function ChatPage() {
+  const webSocketUrl = applicationConfig["backend-server-url-ws"];
+
   const [username, setUsername] = useState(TokenManager.getUsername);
+
   const { connect, sendMessage, messages } = useStompClient(
-    "http://localhost:8080/ws"
+    `${webSocketUrl}/ws`
   );
 
   const isConnectedRef = useRef(false);

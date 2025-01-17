@@ -1,17 +1,19 @@
 import { useState } from "react";
 import axios from "axios";
 import TokenManager from "./TokenManager";
+import { applicationConfig } from "../../../application.config";
 
 const useRefreshToken = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const backendUrl = applicationConfig["backend-server-url"];
 
   const refreshToken = async () => {
     setLoading(true);
     setError(null);
     try {
       const response = await axios.post(
-        "http://localhost:8080/refresh-token",
+        `${backendUrl}/refresh-token`,
         {},
         {
           headers: {

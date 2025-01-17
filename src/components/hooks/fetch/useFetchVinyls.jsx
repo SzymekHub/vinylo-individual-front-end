@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
+import { applicationConfig } from "../../../../application.config";
 
 const useFetchVinyls = () => {
   const [vinylsItems, setVinylsItems] = useState([]);
@@ -10,13 +11,14 @@ const useFetchVinyls = () => {
   // Initialize to 1 to avoid errors
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 5;
+  const backendUrl = applicationConfig["backend-server-url"];
 
   useEffect(() => {
     const fetchVinyls = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:8080/vinyls?page=${currentPage}&size=${pageSize}`,
+          `${backendUrl}/vinyls?page=${currentPage}&size=${pageSize}`,
           {
             headers: {
               Authorization: `Bearer ${TokenManager.getAccessToken()}`,

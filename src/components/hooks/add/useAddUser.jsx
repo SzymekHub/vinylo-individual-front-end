@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { applicationConfig } from "../../../../application.config";
 
 const useAddUser = (usersItems, setUsersItems, onRegisterSuccess) => {
   const [loading, setLoading] = useState(false);
@@ -7,6 +8,7 @@ const useAddUser = (usersItems, setUsersItems, onRegisterSuccess) => {
   // State for success message
   const [registeredUserMessage, setRegisteredUserMessage] = useState("");
   const [username, setUsername] = useState("");
+  const backendUrl = applicationConfig["backend-server-url"];
 
   const registerUser = async (username, email, password) => {
     setLoading(true);
@@ -24,7 +26,7 @@ const useAddUser = (usersItems, setUsersItems, onRegisterSuccess) => {
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/users", newUser);
+      const response = await axios.post(`${backendUrl}/users`, newUser);
 
       if (response && response.data) {
         // Add the new user with the DB-assigned ID to the state

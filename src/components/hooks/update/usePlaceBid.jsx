@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
 import { Client } from "@stomp/stompjs";
+import { applicationConfig } from "../../../../application.config";
 
 export default function usePlaceBid(auctionId) {
   const [loadingBid, setLoadingBid] = useState(false);
@@ -9,6 +10,8 @@ export default function usePlaceBid(auctionId) {
   const [successBid, setSuccessBid] = useState(null);
   const setAuctionDetailsRef = useRef(null);
   const [stompClient, setStompClient] = useState(null);
+  const backendUrl = applicationConfig["backend-server-url"];
+  const webSocketUrl = applicationConfig["backend-server-url-ws"];
 
   const placeBid = useCallback(
     async (bidAmount, userId) => {
@@ -19,7 +22,7 @@ export default function usePlaceBid(auctionId) {
 
       try {
         const response = await axios.post(
-          `http://localhost:8080/bids/${auctionId}`,
+          `${backendUrl}/bids/${auctionId}`,
           { bidAmount, userId },
           {
             headers: {
@@ -53,7 +56,7 @@ export default function usePlaceBid(auctionId) {
   useEffect(() => {
     if (!auctionId) return;
     const client = new Client({
-      brokerURL: "ws://localhost:8080/ws",
+      brokerURL: `${webSocketUrl}/ws`,
       connectHeaders: {
         Authorization: `Bearer ${TokenManager.getAccessToken()}`,
       },

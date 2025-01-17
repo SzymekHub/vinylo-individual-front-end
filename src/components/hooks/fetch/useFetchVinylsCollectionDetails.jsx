@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
+import { applicationConfig } from "../../../../application.config";
 
 export default function useFetchVinylsCollectionDetails() {
   const [vinylCollectionDetails, setVinylCollectionDetails] = useState(null);
@@ -10,13 +11,14 @@ export default function useFetchVinylsCollectionDetails() {
     errorLoadingVinylCollectionDetails,
     setErrorLoadingVinylCollectionDetails,
   ] = useState(null);
+  const backendUrl = applicationConfig["backend-server-url"];
 
   const fetchVinylsCollectionDetails = async (userId, id) => {
     setLoadingVinylCollectionDetails(true);
     setErrorLoadingVinylCollectionDetails(null);
     try {
       const response = await axios.get(
-        `http://localhost:8080/collections/userVinyl/${userId}/${id}`,
+        `${backendUrl}/collections/userVinyl/${userId}/${id}`,
         {
           headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
         }

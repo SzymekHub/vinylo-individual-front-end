@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
+import { applicationConfig } from "../../../../application.config";
 
 const useAddVinylToCollection = (
   collectionVinylsItems,
@@ -10,6 +11,7 @@ const useAddVinylToCollection = (
   const [errorAddingCollection, setErrorAddingCollection] = useState(null);
   const [addedVinylToCollectionMessage, setAddedVinylToCollectionMessage] =
     useState(""); // State for success message
+  const backendUrl = applicationConfig["backend-server-url"];
 
   const addVinylToCollection = async (userId, vinylId) => {
     setLoadingAddingCollection(true);
@@ -22,13 +24,9 @@ const useAddVinylToCollection = (
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/collections",
-        newItem,
-        {
-          headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
-        }
-      );
+      const response = await axios.post(`${backendUrl}/collections`, newItem, {
+        headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
+      });
 
       if (response && response.data) {
         // Add the new item with the DB-assigned ID to the state

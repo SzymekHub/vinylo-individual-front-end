@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { Client } from "@stomp/stompjs";
 import TokenManager from "../hooks/TokenManager";
+import { applicationConfig } from "../../../application.config";
 
 const useCollectionWebSocket = (setVinylItems) => {
   const [stompClient, setStompClient] = useState(null);
+  const webSocketUrl = applicationConfig["backend-server-url-ws"];
 
   useEffect(() => {
     const client = new Client({
-      brokerURL: "ws://localhost:8080/ws",
+      brokerURL: `${webSocketUrl}/ws`,
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,

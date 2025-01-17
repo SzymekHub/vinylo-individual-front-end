@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
 import useFetchVinyls from "../fetch/useFetchVinyls";
+import { applicationConfig } from "../../../../application.config";
 
 const useAddAuction = (auctionsItems, setAuctionsItems) => {
   const {
@@ -12,6 +13,7 @@ const useAddAuction = (auctionsItems, setAuctionsItems) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [addedAuctionMessage, setAddedAuctionMessage] = useState(""); // State for success message
+  const backendUrl = applicationConfig["backend-server-url"];
 
   const addAuction = async (
     title,
@@ -46,13 +48,9 @@ const useAddAuction = (auctionsItems, setAuctionsItems) => {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/auctions",
-        newAuction,
-        {
-          headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
-        }
-      );
+      const response = await axios.post(`${backendUrl}/auctions`, newAuction, {
+        headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
+      });
 
       if (response && response.data) {
         // Add the new item with the DB-assigned ID to the state

@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
 import { Client } from "@stomp/stompjs";
+import { applicationConfig } from "../../../../application.config";
 
 export default function useUpdateAuction(auctionId, setAuctionDetails) {
   const [loadingUpdate, setLoadingUpdate] = useState(false);
@@ -10,6 +11,8 @@ export default function useUpdateAuction(auctionId, setAuctionDetails) {
   const setAuctionDetailsRef = useRef(null);
   const [stompClient, setStompClient] = useState(null);
   const fetchAuctionDetailedRef = useRef(null);
+  const backendUrl = applicationConfig["backend-server-url"];
+  const webSocketUrl = applicationConfig["backend-server-url-ws"];
 
   useEffect(() => {
     setAuctionDetailsRef.current = setAuctionDetails;
@@ -30,7 +33,7 @@ export default function useUpdateAuction(auctionId, setAuctionDetails) {
 
       try {
         const response = await axios.put(
-          `http://localhost:8080/auctions/${auctionId}`,
+          `${backendUrl}/auctions/${auctionId}`,
           {
             title,
             description,
@@ -60,7 +63,7 @@ export default function useUpdateAuction(auctionId, setAuctionDetails) {
   useEffect(() => {
     if (!auctionId) return;
     const client = new Client({
-      brokerURL: "ws://localhost:8080/ws",
+      brokerURL: `${webSocketUrl}/ws`,
       connectHeaders: {
         Authorization: `Bearer ${TokenManager.getAccessToken()}`,
       },

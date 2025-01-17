@@ -4,6 +4,7 @@ import TokenManager from "../TokenManager";
 import { Client } from "@stomp/stompjs";
 import useRefreshToken from "../useRefreshToken";
 import { useNavigate } from "react-router-dom";
+import { applicationConfig } from "../../../../application.config";
 
 export default function useUpgradeProfile(userId) {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ export default function useUpgradeProfile(userId) {
   const [successUpgrade, setSuccessUpgrade] = useState(null);
   const [stompClient, setStompClient] = useState(null);
   const [profileUpdated, setProfileUpdated] = useState(null);
+  const backendUrl = applicationConfig["backend-server-url"];
+  const webSocketUrl = applicationConfig["backend-server-url-ws"];
 
   const upgradeProfile = useCallback(async () => {
     setLoadingUpgrade(true);
@@ -22,7 +25,7 @@ export default function useUpgradeProfile(userId) {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/profile/upgrade/${userId}`,
+        `${backendUrl}/profile/upgrade/${userId}`,
         {},
         {
           headers: {
@@ -53,7 +56,7 @@ export default function useUpgradeProfile(userId) {
   useEffect(() => {
     if (!userId) return;
     const client = new Client({
-      brokerURL: "ws://localhost:8080/ws",
+      brokerURL: `${webSocketUrl}/ws`,
       connectHeaders: {
         Authorization: `Bearer ${TokenManager.getAccessToken()}`,
       },

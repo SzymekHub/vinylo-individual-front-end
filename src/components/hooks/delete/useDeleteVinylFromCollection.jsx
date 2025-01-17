@@ -1,10 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import TokenManager from "../TokenManager";
+import { applicationConfig } from "../../../../application.config";
+
 const useDeleteVinylFromCollection = () => {
   const [loadingDeletingCollection, setLoadingDeletingCollection] =
     useState(false);
   const [errorDeletingCollection, setErrorDeletingCollection] = useState(null);
+  const backendUrl = applicationConfig["backend-server-url"];
 
   const deleteVinylFromCollection = async (vinylId) => {
     const userClaims = TokenManager.getClaims();
@@ -16,14 +19,11 @@ const useDeleteVinylFromCollection = () => {
     setErrorDeletingCollection(null);
 
     try {
-      await axios.delete(
-        `http://localhost:8080/collections/${vinylId}/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${TokenManager.getAccessToken()}`,
-          },
-        }
-      );
+      await axios.delete(`${backendUrl}/collections/${vinylId}/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${TokenManager.getAccessToken()}`,
+        },
+      });
     } catch (error) {
       if (error.response) {
         if (
