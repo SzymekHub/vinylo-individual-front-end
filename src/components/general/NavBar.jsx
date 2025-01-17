@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import vinylo_logo from "../../assets/img/vinylo_logo.png";
 import TokenManager from "../hooks/TokenManager";
 
 export default function NavBar({
@@ -172,11 +173,7 @@ export default function NavBar({
         {/* Logo */}
         <div className="flex-shrink-0">
           <Link to="/">
-            <img
-              src="/src/assets/img/vinylo_logo.png"
-              alt="logo"
-              className="w-50 h-10"
-            />
+            <img src={vinylo_logo} alt="logo" className="w-50 h-10" />
           </Link>
         </div>
 
