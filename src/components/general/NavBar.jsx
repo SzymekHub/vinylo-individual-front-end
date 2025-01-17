@@ -10,6 +10,7 @@ import {
   CircleUserRound,
   ShoppingCart,
   PlusCircle,
+  Star,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -120,6 +121,7 @@ export default function NavBar({
       icon: Disc3,
       path: "/Vinyls",
     },
+    { name: "Artists", icon: Star, path: "/Artists" },
   ];
 
   const mobileNavItems = [
@@ -151,7 +153,10 @@ export default function NavBar({
     },
 
     ...(roles && roles.includes("ADMIN")
-      ? [{ name: "Vinyls", icon: Disc3, path: "/Vinyls" }]
+      ? [
+          { name: "Vinyls", icon: Disc3, path: "/Vinyls" },
+          { name: "Artists", icon: Star, path: "/Artists" },
+        ]
       : []),
     {
       name: "Profile",
