@@ -2,7 +2,7 @@
 
 The React web app for **Vinylo**, a year 2, semester 3 project which was a platform for vinyl collectors. Users can browse records and artists, manage a personal collection, list and bid on auctions, chat in real time, and listen to album previews via Spotify.
 
-The API it talks to is [vinylo-individual-back-end](../vinylo-individual-back-end). Design and planning documents are in [vinylo-individual-documentation](../vinylo-individual-documentation).
+The API it talks to is [vinylo-individual-back-end](https://github.com/SzymekHub/vinylo-individual-back-end). Design and planning documents are in [vinylo-individual-documentation](https://github.com/SzymekHub/vinylo-individual-documentation).
 
 ## Features
 
@@ -60,7 +60,7 @@ cypress/                      # End-to-end tests
 
 - Node.js 18 or newer
 - npm
-- The [Vinylo backend](../vinylo-individual-back-end) running (locally or in Docker)
+- The [Vinylo backend](https://github.com/SzymekHub/vinylo-individual-back-end) running (locally or in Docker)
 
 ## Environment variables
 
@@ -135,8 +135,8 @@ Cypress tests need the app and backend running. The current tests cover profile 
 
 ## Related repositories
 
-- [vinylo-individual-back-end](../vinylo-individual-back-end): the Spring Boot API
-- [vinylo-individual-documentation](../vinylo-individual-documentation): project plan, design document, diagrams and reports
+- [vinylo-individual-back-end](https://github.com/SzymekHub/vinylo-individual-back-end): the Spring Boot API
+- [vinylo-individual-documentation](https://github.com/SzymekHub/vinylo-individual-documentation): project plan, design document, diagrams and reports
 
 ## Author
 
